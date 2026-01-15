@@ -16,9 +16,9 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
 
   useEffect(() => {
     const greetings = [
-      '>Hello', '>Hola', '>Bonjour', '>Ciao', '>Hallo', 
-      '>Olá', '>Привет', '>こんにちは', '>안녕하세요',
-      '>Hej', '>Namaste', '>Sawubona', '>Kamusta'
+      'Hello>', 'Hola>', 'Bonjour>', 'Ciao>', 'Hallo>', 
+      'Olá>', 'Привет>', 'こんにちは>', '안녕하세요>',
+      'Hej>', 'Namaste>', 'Sawubona>', 'Kamusta>'
     ];
     
     let index = 0;

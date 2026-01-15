@@ -2,9 +2,11 @@
 
 import { User, Mail, Music, PawPrint, Building2, Sun, Moon, Keyboard, Cloud, Pencil, DollarSign, Newspaper, Film, TrendingUp, Map, MessageCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import AboutModal from './AboutModal';
 
 export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkMode: boolean) => void }) {
   const [isDarkMode, setIsDarkMode] = useState(true); // Moon is default (dark mode on)
+  const [showAboutModal, setShowAboutModal] = useState(false);
   
   const [loadingStates, setLoadingStates] = useState({
     music: true,
@@ -112,7 +114,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
       </div>
       <div className="p-8 break-words"> 
         <p style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-3xl font-bold mb-6 ml-10">
-          ~ $ls -la
+          ~$ ls -la
         </p>
         
         <div className="space-y-6">
@@ -122,7 +124,11 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
               [INFO]
             </p>
             <div className="ml-6 space-y-2">
-              <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg flex items-center gap-2">
+              <p 
+                style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} 
+                className="text-lg flex items-center gap-2 cursor-pointer hover:opacity-80"
+                onClick={() => setShowAboutModal(true)}
+              >
                 <User size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /About
               </p>
               <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg flex items-center gap-2">
@@ -274,6 +280,13 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
           </div>
         </div>
       </div>
+      
+      {showAboutModal && (
+        <AboutModal 
+          isDarkMode={isDarkMode} 
+          onClose={() => setShowAboutModal(false)} 
+        />
+      )}
     </div>
   );
 }
