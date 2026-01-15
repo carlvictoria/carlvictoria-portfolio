@@ -24,6 +24,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+
+{/* issue cleanup start */}
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <script
           dangerouslySetInnerHTML={{
@@ -42,6 +44,9 @@ export default function RootLayout({
 })();`,
           }}
         />
+{/* issue cleanup end */}
+
+
         {children}
       </body>
     </html>
