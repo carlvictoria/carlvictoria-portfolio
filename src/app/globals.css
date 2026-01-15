@@ -7,7 +7,14 @@
   --cmd-background: #193549;
   --font-terminal: 'Fira Code', monospace;
   --cmd-title: #CCCCCC;
+
+  --background-l: #EEE8D5;
+  --foreground-l: #111827;
+  --title-color-l: #278BD2;
+  --cmd-background-l: #FDF6E3;
+  --cmd-title-l: #586E75;
 }
+
 
 html, body, #__next {
   height: 100%;
