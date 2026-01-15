@@ -12,8 +12,8 @@ export default function GreetingAnimation() {
   useEffect(() => {
     const greetings = [
       '>Hello', '>Hola', '>Bonjour', '>Ciao', '>Hallo', 
-      '>Olá', '>Привет', '>こんにちは', '>안녕하세요', '>Merhaba',
-      '>Hej', '>Namaste', '>Sawubona', '>Kamusta', '>Kumusta'
+      '>Olá', '>Привет', '>こんにちは', '>안녕하세요',
+      '>Hej', '>Namaste', '>Sawubona', '>Kamusta'
     ];
     
     let index = 0;
@@ -52,11 +52,11 @@ export default function GreetingAnimation() {
       }}
     >
       <h1 
-        className="text-7xl font-bold transition-all duration-[1500ms] ease-in-out flex items-center"
+        className="text-6xl font-bold transition-all duration-[1500ms] ease-in-out flex items-center -mt-5"
         style={{
           color: 'var(--title-color)', 
           fontFamily: 'var(--font-terminal)',
-          transform: moveToLeft ? 'translateX(-11vw)' : 'translateX(0)',
+          transform: moveToLeft ? 'translateX(-12.5vw)' : 'translateX(0)',
         }}
       >
         <span>{showFinal ? <>{'>'}Carl Victoria</> : displayText}</span>
