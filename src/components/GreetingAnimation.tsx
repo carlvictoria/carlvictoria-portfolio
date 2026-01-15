@@ -52,14 +52,15 @@ export default function GreetingAnimation() {
       }}
     >
       <h1 
-        className="text-7xl font-bold transition-all duration-[1500ms] ease-in-out"
+        className="text-7xl font-bold transition-all duration-[1500ms] ease-in-out flex items-center"
         style={{
           color: 'var(--title-color)', 
           fontFamily: 'var(--font-terminal)',
           transform: moveToLeft ? 'translateX(-11vw)' : 'translateX(0)',
         }}
       >
-        {showFinal ? <>{'>'}Carl Victoria</> : displayText}
+        <span>{showFinal ? <>{'>'}Carl Victoria</> : displayText}</span>
+        {showFinal && <span className="blinking-cursor">_</span>}
       </h1>
       {showFinal && (
         <div className="animate-fade-in">
