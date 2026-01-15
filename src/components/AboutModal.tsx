@@ -10,9 +10,13 @@ interface AboutModalProps {
 
 export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
   const [isMinimized, setIsMinimized] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [typedText, setTypedText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
+  
+  // Dragging state
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   
   const aboutMeText = 'about me';
 
@@ -52,6 +56,46 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
 
     return () => clearInterval(cursorInterval);
   }, []);
+
+  // Mouse event handlers for dragging
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y
+    });
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    
+    requestAnimationFrame(() => {
+      setPosition({
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y
+      });
+    });
+  };
+
+  const handleMouseUp = (e: MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove, { passive: false });
+      document.addEventListener('mouseup', handleMouseUp, { passive: false });
+      document.body.style.userSelect = 'none';
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        document.body.style.userSelect = '';
+      };
+    }
+  }, [isDragging, dragStart.x, dragStart.y]);
 
   const techStackIcons = {
     frontend: [
@@ -134,26 +178,27 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
       style={{ backgroundColor: 'transparent' }}
     >
       <div 
-        className={`border overflow-hidden transition-all duration-300`}
-        style={{ 
-          backgroundColor: isDarkMode ? 'var(--cmd-background)' : 'var(--cmd-background-l)', 
+        className="mt-8 shadow-4xl border border-black-600 rounded-lg w-[1200px] max-w-5xl min-h-[750px] overflow-hidden"
+        style={{
+          backgroundColor: isDarkMode ? 'var(--cmd-background)' : 'var(--cmd-background-l)',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-          borderColor: isDarkMode ? '#4b5563' : '#D4C5A9',
-          borderRadius: isFullscreen ? '0' : '0.5rem',
-          width: isFullscreen ? '100vw' : '1600px',
-          height: isFullscreen ? '100vh' : '900px',
-          maxWidth: isFullscreen ? '100vw' : '90vw',
-          maxHeight: isFullscreen ? '100vh' : '90vh'
+          transition: 'background-color 0.3s ease',
+          position: 'relative',
+          transform: `translate(${position.x}px, ${position.y}px)`,
+          cursor: isDragging ? 'grabbing' : 'default',
+          willChange: isDragging ? 'transform' : 'auto'
         }}
       >
         {/* Header with window controls */}
         <div 
-          className="px-4 py-2 border-b flex items-center"
+          className="px-4 py-2 border-b flex items-center select-none"
           style={{
             backgroundColor: isDarkMode ? '#1f2937' : '#E7DCC8',
             borderColor: isDarkMode ? '#4b5563' : '#D4C5A9',
-            transition: 'background-color 0.3s ease, border-color 0.3s ease'
+            transition: 'background-color 0.3s ease, border-color 0.3s ease',
+            cursor: 'grab'
           }}
+          onMouseDown={handleMouseDown}
         >
           <div className="flex gap-2 mr-4">
             <div 
@@ -163,14 +208,6 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
               title="Close"
             >
               <span className="hidden group-hover:block text-white text-[10px] font-bold absolute">×</span>
-            </div>
-            <div 
-              className="w-3 h-3 rounded-full cursor-pointer hover:opacity-80 transition-opacity flex items-center justify-center group relative"
-              style={{ backgroundColor: '#eab308' }}
-              onClick={() => setIsFullscreen(!isFullscreen)}
-              title="Fullscreen"
-            >
-              <span className="hidden group-hover:block text-white text-[8px] font-bold absolute">+</span>
             </div>
             <div 
               className="w-3 h-3 rounded-full cursor-pointer hover:opacity-80 transition-opacity flex items-center justify-center group relative"
