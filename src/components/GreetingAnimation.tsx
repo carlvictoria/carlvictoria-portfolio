@@ -52,7 +52,7 @@ export default function GreetingAnimation() {
       }}
     >
       <h1 
-        className="text-7xl font-bold transition-all duration-[1000ms] ease-in-out"
+        className="text-7xl font-bold transition-all duration-[1500ms] ease-in-out"
         style={{
           color: 'var(--title-color)', 
           fontFamily: 'var(--font-terminal)',
@@ -61,7 +61,11 @@ export default function GreetingAnimation() {
       >
         {showFinal ? <>{'>'}Carl Victoria</> : displayText}
       </h1>
-      {showFinal && <ContentBox />}
+      {showFinal && (
+        <div className="animate-fade-in">
+          <ContentBox />
+        </div>
+      )}
     </div>
   );
 }
