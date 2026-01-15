@@ -4,6 +4,8 @@ import { User, Mail, Music, PawPrint, Building2, Sun, Moon, Keyboard, Cloud, Pen
 import { useState, useEffect } from 'react';
 
 export default function ContentBox() {
+  const [isDarkMode, setIsDarkMode] = useState(true); // Moon is default (dark mode on)
+  
   const [loadingStates, setLoadingStates] = useState({
     music: true,
     weather: true,
@@ -45,9 +47,36 @@ export default function ContentBox() {
         <p style={{color: 'var(--cmd-title)', fontFamily: 'var(--font-terminal)'}} className="text-center flex-1">
           CMD
         </p>
-        <div className="flex gap-1 items-center">
-          <Sun size={18} color="white" />
-          <Moon size={18} color="#FFC600" />
+        <div 
+          className="relative flex gap-1 items-center cursor-pointer px-2 py-1 rounded-full border border-gray-600 bg-gray-700"
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          style={{ transition: 'all 0.3s ease' }}
+        >
+          <div 
+            className="absolute w-7 h-7 bg-gray-600 rounded-full transition-all duration-300 ease-in-out"
+            style={{ 
+              left: isDarkMode ? '24px' : '2px',
+              transition: 'left 0.3s ease-in-out'
+            }}
+          />
+          <Sun 
+            size={18} 
+            color={isDarkMode ? '#666' : '#FFC600'} 
+            className="relative z-10 transition-all duration-300"
+            style={{ 
+              transform: isDarkMode ? 'scale(1)' : 'scale(1.2) rotate(90deg)',
+              transition: 'all 0.3s ease-in-out'
+            }}
+          />
+          <Moon 
+            size={18} 
+            color={isDarkMode ? '#FFC600' : '#666'} 
+            className="relative z-10 transition-all duration-300"
+            style={{ 
+              transform: isDarkMode ? 'scale(1.2) rotate(-20deg)' : 'scale(1)',
+              transition: 'all 0.3s ease-in-out'
+            }}
+          />
         </div>
       </div>
       <div className="p-8 break-words"> 
