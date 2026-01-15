@@ -55,16 +55,17 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
   }, []);
 
   return (
-   <div 
-     className="mt-8 shadow-4xl border border-black-600 rounded-lg w-[1200px] max-w-5xl min-h-[750px] overflow-hidden" 
-     style={{ 
-       backgroundColor: isDarkMode ? 'var(--cmd-background)' : 'var(--cmd-background-l)', 
-       boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-       transition: 'background-color 0.3s ease'
-     }}
-   >
+    <>
       <div 
-        className="px-4 py-2 border-b flex justify-between items-center"
+        className="mt-8 shadow-4xl border border-black-600 rounded-lg w-[1200px] max-w-5xl min-h-[750px] overflow-hidden" 
+        style={{ 
+          backgroundColor: isDarkMode ? 'var(--cmd-background)' : 'var(--cmd-background-l)', 
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+          transition: 'background-color 0.3s ease'
+        }}
+      >
+        <div 
+          className="px-4 py-2 border-b flex justify-between items-center"
         style={{
           backgroundColor: isDarkMode ? '#1f2937' : '#E7DCC8',
           borderColor: isDarkMode ? '#4b5563' : '#D4C5A9',
@@ -280,6 +281,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
           </div>
         </div>
       </div>
+      </div>
       
       {showAboutModal && (
         <AboutModal 
@@ -287,6 +289,6 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
           onClose={() => setShowAboutModal(false)} 
         />
       )}
-    </div>
+    </>
   );
 }

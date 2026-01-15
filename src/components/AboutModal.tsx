@@ -174,19 +174,36 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
 
   return (
     <div 
-      className="fixed inset-0 flex items-center justify-center z-50 animate-fade-in"
-      style={{ backgroundColor: 'transparent' }}
+      className="fixed z-50" 
+      style={{ 
+        backgroundColor: 'transparent',
+        inset: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        pointerEvents: 'none'
+      }}
     >
       <div 
-        className="mt-8 shadow-4xl border border-black-600 rounded-lg w-[1200px] max-w-5xl min-h-[750px] overflow-hidden"
+        className="animate-fade-in"
         style={{
+          width: '1600px',
+          maxWidth: 'none',
+          minWidth: '1600px',
+          minHeight: '800px',
+          flexShrink: 0,
           backgroundColor: isDarkMode ? 'var(--cmd-background)' : 'var(--cmd-background-l)',
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
           transition: 'background-color 0.3s ease',
           position: 'relative',
           transform: `translate(${position.x}px, ${position.y}px)`,
           cursor: isDragging ? 'grabbing' : 'default',
-          willChange: isDragging ? 'transform' : 'auto'
+          willChange: isDragging ? 'transform' : 'auto',
+          borderRadius: '0.5rem',
+          border: '1px solid',
+          borderColor: isDarkMode ? '#4b5563' : '#D4C5A9',
+          overflow: 'hidden',
+          pointerEvents: 'auto'
         }}
       >
         {/* Header with window controls */}
