@@ -21,7 +21,7 @@ export default function ContentBox() {
           {/* Info Section */}
           <div>
             <p style={{color: 'var(--cmd-title)', fontFamily: 'var(--font-terminal)'}} className="text-base mb-3">
-              → Info:
+              [INFO]
             </p>
             <div className="ml-6 space-y-2">
               <p style={{color: '#FFC600', fontFamily: 'var(--font-terminal)'}} className="text-lg flex items-center gap-2">
@@ -36,7 +36,7 @@ export default function ContentBox() {
           {/* Projects Section */}
           <div>
             <p style={{color: 'var(--cmd-title)', fontFamily: 'var(--font-terminal)'}} className="text-base mb-3">
-              → Projects:
+              [PROJECTS]
             </p>
             <div className="ml-6 space-y-2">
               <div className="flex gap-4">
@@ -69,7 +69,7 @@ export default function ContentBox() {
           {/* Interactive Features Section */}
           <div>
             <p style={{color: 'var(--cmd-title)', fontFamily: 'var(--font-terminal)'}} className="text-base mb-3">
-              → Interactive Features:
+              [FEATURES]
             </p>
             <div className="ml-6 space-y-2">
               <div className="flex gap-4">
