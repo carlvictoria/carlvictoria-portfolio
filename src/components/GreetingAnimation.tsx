@@ -3,11 +3,16 @@
 import { useState, useEffect } from 'react';
 import ContentBox from './ContentBox';
 
-export default function GreetingAnimation() {
+export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean }) {
   const [displayText, setDisplayText] = useState('');
   const [showFinal, setShowFinal] = useState(false);
   const [moveToLeft, setMoveToLeft] = useState(false);
   const [moveToTop, setMoveToTop] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState(isDarkMode);
+
+  useEffect(() => {
+    setCurrentTheme(isDarkMode);
+  }, [isDarkMode]);
 
   useEffect(() => {
     const greetings = [
@@ -18,7 +23,7 @@ export default function GreetingAnimation() {
     
     let index = 0;
     let cycles = 0;
-    const maxCycles = 2;
+    const maxCycles = 1;
     
     const interval = setInterval(() => {
       setDisplayText(greetings[index]);
@@ -52,19 +57,20 @@ export default function GreetingAnimation() {
       }}
     >
       <h1 
-        className="text-6xl font-bold transition-all duration-[1500ms] ease-in-out flex items-center -mt-5"
+        className="text-5xl font-bold transition-all duration-[1500ms] ease-in-out flex items-center -mt-5"
         style={{
-          color: 'var(--title-color)', 
+          color: currentTheme ? 'var(--title-color)' : 'var(--title-color-l)', 
           fontFamily: 'var(--font-terminal)',
-          transform: moveToLeft ? 'translateX(-12.5vw)' : 'translateX(0)',
+          transform: moveToLeft ? 'translateX(-9.5vw)' : 'translateX(0)',
+          transition: 'color 0.3s ease, transform 1500ms ease-in-out'
         }}
       >
-        <span>{showFinal ? <>{'>'}Carl Victoria</> : displayText}</span>
-        {showFinal && <span className="blinking-cursor">_</span>}
+        <span>{showFinal ? <>C:\Users\CarlVictoria{'>'}</> : displayText}</span>
+        {showFinal && <span className="blinking-cursor" style={{ color: currentTheme ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease' }}>_</span>}
       </h1>
       {showFinal && (
         <div className="animate-fade-in">
-          <ContentBox />
+          <ContentBox onThemeChange={setCurrentTheme} />
         </div>
       )}
     </div>
