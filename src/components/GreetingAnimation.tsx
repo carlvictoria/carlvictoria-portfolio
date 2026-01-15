@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import ContentBox from './ContentBox';
 
 export default function GreetingAnimation() {
   const [displayText, setDisplayText] = useState('');
@@ -49,6 +50,7 @@ export default function GreetingAnimation() {
       <h1 style={{color: 'var(--title-color)', fontFamily: 'var(--font-terminal)'}} className="text-7xl font-bold">
         {showFinal ? <>{'>'}Carl Victoria</> : displayText}
       </h1>
+      {showFinal && <ContentBox />}
     </div>
   );
 }

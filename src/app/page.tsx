@@ -1,9 +1,5 @@
-import GreetingAnimation from '@/components/GreetingAnimation';
+import HomePage from '@/pages/HomePage';
 
 export default function Home() {
-  return (
-    <main className="min-h-screen flex justify-center">
-      <GreetingAnimation />
-    </main>
-  );
+  return <HomePage />;
 }
