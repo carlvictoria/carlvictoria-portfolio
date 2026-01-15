@@ -24,9 +24,24 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `// Remove injected attributes that cause hydration mismatches
+;(function(){
+  try{
+    var b = document && document.body;
+    if(!b) return;
+    var attrs = Array.prototype.slice.call(b.attributes || []);
+    attrs.forEach(function(a){
+      if(/^__processed_/.test(a.name) || a.name === 'bis_register'){
+        b.removeAttribute(a.name);
+      }
+    });
+  }catch(e){}
+})();`,
+          }}
+        />
         {children}
       </body>
     </html>
