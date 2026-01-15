@@ -6,6 +6,7 @@
   --title-color: #FFC600;
   --cmd-background: #193549;
   --font-terminal: 'Fira Code', monospace;
+  --cmd-title: #CCCCCC;
 }
 
 html, body, #__next {

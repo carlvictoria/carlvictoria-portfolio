@@ -6,6 +6,7 @@ import ContentBox from './ContentBox';
 export default function GreetingAnimation() {
   const [displayText, setDisplayText] = useState('');
   const [showFinal, setShowFinal] = useState(false);
+  const [moveToLeft, setMoveToLeft] = useState(false);
   const [moveToTop, setMoveToTop] = useState(false);
 
   useEffect(() => {
@@ -31,7 +32,10 @@ export default function GreetingAnimation() {
           clearInterval(interval);
           setTimeout(() => {
             setShowFinal(true);
-            setTimeout(() => setMoveToTop(true), 100);
+            setTimeout(() => {
+              setMoveToLeft(true);
+              setTimeout(() => setMoveToTop(true), 1000);
+            }, 100);
           }, 100);
         }
       }
@@ -42,12 +46,19 @@ export default function GreetingAnimation() {
 
   return (
     <div 
-      className="transition-all duration-[1500ms] ease-in-out"
+      className="transition-all duration-[1000ms] ease-in-out flex flex-col items-center"
       style={{
         transform: moveToTop ? 'translateY(4rem)' : 'translateY(50vh)',
       }}
     >
-      <h1 style={{color: 'var(--title-color)', fontFamily: 'var(--font-terminal)'}} className="text-7xl font-bold">
+      <h1 
+        className="text-7xl font-bold transition-all duration-[1000ms] ease-in-out"
+        style={{
+          color: 'var(--title-color)', 
+          fontFamily: 'var(--font-terminal)',
+          transform: moveToLeft ? 'translateX(-11vw)' : 'translateX(0)',
+        }}
+      >
         {showFinal ? <>{'>'}Carl Victoria</> : displayText}
       </h1>
       {showFinal && <ContentBox />}
