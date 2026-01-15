@@ -189,7 +189,7 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
         style={{
           width: '1600px',
           maxWidth: 'none',
-          minWidth: '1600px',
+          minWidth: '1020px',
           minHeight: '800px',
           flexShrink: 0,
           backgroundColor: isDarkMode ? 'var(--cmd-background)' : 'var(--cmd-background-l)',
