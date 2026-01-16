@@ -128,37 +128,48 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
               ~$ cat ~/.profile
             </p>
             
-            <div className="space-y-1.5" style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>
-              <div className="flex justify-between">
-                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>NAME:</span>
-                <span style={{ color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)' }} className="font-bold">CarlVictoria</span>
+            <div className="space-y-2" style={{ fontFamily: 'monospace', fontSize: '0.75rem' }}>
+              {/* Name with highlight */}
+              <div className="mb-3">
+                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)', fontSize: '0.65rem' }}>USER</span>
+                <p style={{ color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontSize: '1.1rem', fontWeight: 'bold', marginTop: '0.25rem' }}>CarlVictoria</p>
               </div>
-              <div className="flex justify-between items-center">
-                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>STATUS:</span>
-                <span className="flex items-center gap-1" style={{ color: isDarkMode ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 180, 90, 1)' }}>
-                  <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                  [ AVAILABLE ]
+              
+              {/* Status with visual indicator */}
+              <div className="flex items-center justify-between py-2 px-2 rounded" style={{ background: isDarkMode ? 'rgba(0, 255, 136, 0.1)' : 'rgba(0, 180, 90, 0.1)' }}>
+                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)', fontSize: '0.7rem' }}>STATUS</span>
+                <span className="flex items-center gap-1.5" style={{ color: isDarkMode ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 180, 90, 1)', fontSize: '0.75rem', fontWeight: 'bold' }}>
+                  <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse" style={{ boxShadow: '0 0 4px rgba(0, 255, 136, 0.8)' }}></span>
+                  AVAILABLE
                 </span>
               </div>
-              <div className="flex justify-between">
-                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>ROLE:</span>
-                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>Full-Stack Dev</span>
+              
+              {/* Info Grid */}
+              <div className="space-y-1.5 pt-2">
+                <div className="flex justify-between">
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>ROLE:</span>
+                  <span style={{ color: isDarkMode ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 180, 90, 1)', fontWeight: 'bold' }}>Full-Stack Dev</span>
+                </div>
+                <div className="flex justify-between">
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>FOCUS:</span>
+                  <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>Web Apps</span>
+                </div>
+                <div className="flex justify-between">
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>STACK:</span>
+                  <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>TS, Python</span>
+                </div>
               </div>
-              <div className="flex justify-between">
-                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>FOCUS:</span>
-                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>Web Apps</span>
-              </div>
-              <div className="flex justify-between">
-                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>LANG:</span>
-                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>TS, Python</span>
-              </div>
-              <div className="flex justify-between">
-                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>LOCATION:</span>
-                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>Philippines</span>
-              </div>
-              <div className="flex justify-between">
-                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>TIMEZONE:</span>
-                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>UTC+8</span>
+              
+              {/* Location section */}
+              <div className="pt-2 mt-2" style={{ borderTop: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}` }}>
+                <div className="flex justify-between mb-1">
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>🌏 LOCATION:</span>
+                  <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>Philippines</span>
+                </div>
+                <div className="flex justify-between">
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>⏰ TIMEZONE:</span>
+                  <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>UTC+8</span>
+                </div>
               </div>
             </div>
           </div>
@@ -171,26 +182,55 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
               background: isDarkMode ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.5)'
             }}
           >
-            <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.75rem', fontFamily: 'monospace' }} className="mb-4">
+            <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.75rem', fontFamily: 'monospace' }} className="mb-3">
               ~$ gh stats --user carlvictoria
             </p>
             
-            <div className="space-y-3" style={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>
-              <div>
-                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.75rem' }}>REPOS:</span>
-                <p style={{ color: isDarkMode ? 'rgba(0, 217, 255, 1)' : 'rgba(0, 150, 200, 1)', fontSize: '1.5rem', fontWeight: 'bold' }}>
-                  {githubStats.public_repos} <span style={{ fontSize: '0.75rem', fontWeight: 'normal' }}>public</span>
-                </p>
+            <div className="space-y-3" style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.7rem' }}>PUBLIC REPOS</span>
+                  <p style={{ color: isDarkMode ? 'rgba(0, 217, 255, 1)' : 'rgba(0, 150, 200, 1)', fontSize: '1.5rem', fontWeight: 'bold' }}>
+                    {githubStats.public_repos}
+                  </p>
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)', fontSize: '0.65rem' }}>repositories</span>
+                </div>
+                <div>
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.7rem' }}>FOLLOWERS</span>
+                  <p style={{ color: isDarkMode ? 'rgba(0, 217, 255, 1)' : 'rgba(0, 150, 200, 1)', fontSize: '1.5rem', fontWeight: 'bold' }}>
+                    {githubStats.followers}
+                  </p>
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)', fontSize: '0.65rem' }}>developers</span>
+                </div>
               </div>
-              <div>
-                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.75rem' }}>FOLLOWERS:</span>
-                <p style={{ color: isDarkMode ? 'rgba(0, 217, 255, 1)' : 'rgba(0, 150, 200, 1)', fontSize: '1.5rem', fontWeight: 'bold' }}>
-                  {githubStats.followers}
-                </p>
+              
+              {/* Activity Indicator */}
+              <div className="pt-2" style={{ borderTop: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}` }}>
+                <div className="flex items-center justify-between mb-2">
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.7rem' }}>LAST ACTIVITY</span>
+                  <span className="flex items-center gap-1" style={{ color: isDarkMode ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 180, 90, 1)', fontSize: '0.7rem' }}>
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                    2h ago
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div style={{ background: isDarkMode ? 'rgba(0, 217, 255, 0.2)' : 'rgba(0, 150, 200, 0.2)', padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.7rem', color: isDarkMode ? 'rgba(0, 217, 255, 1)' : 'rgba(0, 150, 200, 1)' }}>
+                    📦 Push
+                  </div>
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)', fontSize: '0.65rem' }}>to main branch</span>
+                </div>
               </div>
-              <div className="flex items-center gap-2 pt-2 border-t" style={{ borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)' }}>
-                <span className="inline-block w-2 h-2 rounded-full bg-green-500"></span>
-                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.75rem' }}>Last pushed: 2h ago</span>
+              
+              {/* Streak indicator */}
+              <div className="pt-2" style={{ borderTop: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}` }}>
+                <div className="flex justify-between items-center">
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.7rem' }}>COMMIT STREAK</span>
+                  <div className="flex items-center gap-1">
+                    <span style={{ fontSize: '1rem' }}>🔥</span>
+                    <span style={{ color: isDarkMode ? 'rgba(0, 217, 255, 1)' : 'rgba(0, 150, 200, 1)', fontWeight: 'bold', fontSize: '0.9rem' }}>12 days</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
