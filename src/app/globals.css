@@ -54,3 +54,14 @@ body {
   animation: blink 1s infinite;
   margin-left: 0.2rem;
 }
+
+@keyframes paintPulse {
+  0%, 100% {
+    opacity: 0.15;
+    filter: blur(25px) hue-rotate(0deg);
+  }
+  50% {
+    opacity: 0.25;
+    filter: blur(30px) hue-rotate(10deg);
+  }
+}

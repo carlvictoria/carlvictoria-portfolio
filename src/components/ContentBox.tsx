@@ -150,7 +150,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
                   <PawPrint size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /PawSense
                 </p>
                 <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
-                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>{'>'} lrwxr-xr-x 1 carlvictoria admin 2025-01-15 projects/pawsense →</span> <a href="https://github.com/Dubuu03/PawSense" style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}} className="hover:underline">https://github.com/Dubuu03/PawSense</a>
+                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-01-15 projects/pawsense →</span> <a href="https://github.com/Dubuu03/PawSense" style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}} className="hover:underline">https://github.com/Dubuu03/PawSense</a>
                 </p>
               </div>
               <div className="flex gap-4">
@@ -158,7 +158,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
                   <Building2 size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /CSU_Forum
                 </p>
                 <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
-                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>{'>'} lrwxr-xr-x 1 carlvictoria admin 2025-01-15 projects/forum →</span> <a href="https://github.com/Dubuu03/CSU_Forum" style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}} className="hover:underline">https://github.com/Dubuu03/CSU_Forum</a>
+                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-01-15 projects/forum →</span> <a href="https://github.com/Dubuu03/CSU_Forum" style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}} className="hover:underline">https://github.com/Dubuu03/CSU_Forum</a>
                 </p>
               </div>
               <div className="flex gap-4">
@@ -166,7 +166,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
                   <DollarSign size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /utangPH
                 </p>
                 <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
-                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>{'>'} lrwxr-xr-x 1 carlvictoria admin 2025-01-15 projects/utangph →</span> <a href="https://github.com/Dubuu03/utangph" style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}} className="hover:underline">https://github.com/Dubuu03/utangph</a>
+                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-01-15 projects/utangph →</span> <a href="https://github.com/Dubuu03/utangph" style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}} className="hover:underline">https://github.com/Dubuu03/utangph</a>
                 </p>
               </div>
             </div>
@@ -186,7 +186,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
                   {loadingStates.music ? (
                     <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading Music API{loadingDots}]</span>
                   ) : (
-                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>{'>'} lrwxr-xr-x 1 carlvictoria admin 2025-12-10 features/music → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Spotify Web API</span></>
+                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-12-10 features/music → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Spotify Web API</span></>
                   )}
                 </p>
               </div>
@@ -195,7 +195,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
                   <Pencil size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Drawing App
                 </p>
                 <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
-                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>{'>'} lrwxr-xr-x 1 carlvictoria admin 2025-12-08 features/drawing → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>HTML5 Canvas API</span>
+                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-12-08 features/drawing → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>HTML5 Canvas API</span>
                 </p>
               </div>
               <div className="flex gap-4">
@@ -203,7 +203,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
                   <Keyboard size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Typing Test
                 </p>
                 <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
-                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>{'>'} lrwxr-xr-x 1 carlvictoria admin 2025-12-05 features/typing → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Random Word API</span>
+                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-12-05 features/typing → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Random Word API</span>
                 </p>
               </div>
               <div className="flex gap-4">
@@ -214,7 +214,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
                   {loadingStates.weather ? (
                     <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading Weather API{loadingDots}]</span>
                   ) : (
-                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>{'>'} lrwxr-xr-x 1 carlvictoria admin 2025-12-03 features/weather → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>OpenWeatherMap API</span></>
+                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-12-03 features/weather → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>OpenWeatherMap API</span></>
                   )}
                 </p>
               </div>
@@ -226,7 +226,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
                   {loadingStates.news ? (
                     <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading News API{loadingDots}]</span>
                   ) : (
-                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>{'>'} lrwxr-xr-x 1 carlvictoria admin 2025-11-28 features/news → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>NewsAPI</span></>
+                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-11-28 features/news → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>NewsAPI</span></>
                   )}
                 </p>
               </div>
@@ -238,7 +238,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
                   {loadingStates.movie ? (
                     <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading Movie API{loadingDots}]</span>
                   ) : (
-                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>{'>'} lrwxr-xr-x 1 carlvictoria admin 2025-11-20 features/movies → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>TMDB API</span></>
+                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-11-20 features/movies → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>TMDB API</span></>
                   )}
                 </p>
               </div>
@@ -250,7 +250,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
                   {loadingStates.stock ? (
                     <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading Stock API{loadingDots}]</span>
                   ) : (
-                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>{'>'} lrwxr-xr-x 1 carlvictoria admin 2025-11-15 features/stocks → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Alpha Vantage API</span></>
+                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-11-15 features/stocks → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Alpha Vantage API</span></>
                   )}
                 </p>
               </div>
@@ -262,7 +262,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
                   {loadingStates.maps ? (
                     <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading Maps API{loadingDots}]</span>
                   ) : (
-                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>{'>'} lrwxr-xr-x 1 carlvictoria admin 2025-11-10 features/maps → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Mapbox API</span></>
+                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-11-10 features/maps → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Mapbox API</span></>
                   )}
                 </p>
               </div>
@@ -274,7 +274,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
                   {loadingStates.chatbot ? (
                     <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading AI Model{loadingDots}]</span>
                   ) : (
-                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>{'>'} lrwxr-xr-x 1 carlvictoria admin 2025-11-05 features/chatbot → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>OpenAI API</span></>
+                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-11-05 features/chatbot → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>OpenAI API</span></>
                   )}
                 </p>
               </div>
