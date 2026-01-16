@@ -4,10 +4,12 @@ import { User, Mail, Music, PawPrint, Building2, Sun, Moon, Keyboard,
         Cloud, Pencil, DollarSign, Newspaper, Film, TrendingUp, Map, MessageCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import AboutModal from './AboutModal';
+import TypingTestModal from './TypingTestModal';
 
 export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?: (isDarkMode: boolean) => void; onClose?: () => void }) {
   const [isDarkMode, setIsDarkMode] = useState(true); // Moon is default (dark mode on)
   const [showAboutModal, setShowAboutModal] = useState(false);
+  const [showTypingTest, setShowTypingTest] = useState(false);
   
   const [loadingStates, setLoadingStates] = useState({
     music: true,
@@ -219,22 +221,6 @@ export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?:
               </div>
               <div className="flex gap-4">
                 <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
-                  <Pencil size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Drawing App
-                </p>
-                <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
-                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-12-08 features/drawing → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>HTML5 Canvas API</span>
-                </p>
-              </div>
-              <div className="flex gap-4">
-                <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
-                  <Keyboard size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Typing Test
-                </p>
-                <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
-                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-12-05 features/typing → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Random Word API</span>
-                </p>
-              </div>
-              <div className="flex gap-4">
-                <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
                   <Cloud size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Weather App
                 </p>
                 <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
@@ -307,6 +293,35 @@ export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?:
               </div>
             </div>
           </div>
+
+          {/* Playground Section */}
+          <div>
+            <p style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-base mb-3">
+              [PLAYGROUND]
+            </p>
+            <div className="ml-6 space-y-2">
+              <div className="flex gap-4">
+                <p 
+                  style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} 
+                  className="text-lg w-64 flex-shrink-0 flex items-center gap-2 cursor-pointer hover:opacity-80"
+                  onClick={() => setShowTypingTest(true)}
+                >
+                  <Keyboard size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Typing Test
+                </p>
+                <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
+                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-12-05 playground/typing → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Random Word API</span>
+                </p>
+              </div>
+              <div className="flex gap-4">
+                <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
+                  <Pencil size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Drawing App
+                </p>
+                <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
+                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-12-08 playground/drawing → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>HTML5 Canvas API</span>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       </div>
@@ -315,6 +330,13 @@ export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?:
         <AboutModal 
           isDarkMode={isDarkMode} 
           onClose={() => setShowAboutModal(false)} 
+        />
+      )}
+      
+      {showTypingTest && (
+        <TypingTestModal 
+          isDarkMode={isDarkMode} 
+          onClose={() => setShowTypingTest(false)} 
         />
       )}
     </>
