@@ -1,7 +1,6 @@
 'use client';
 
 import { Github, Linkedin, Mail, Download, ExternalLink } from 'lucide-react';
-import { useState, useEffect } from 'react';
 import Modal from './Modal';
 
 interface AboutModalProps {
@@ -15,33 +14,22 @@ interface GitHubStats {
   public_repos: number;
   followers: number;
   following: number;
+  total_stars: number;
+  total_forks: number;
+  contributions_2025: number;
 }
 
 export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
-  const [gitStoryData, setGitStoryData] = useState<string>('');
-  const [isLoadingGitStory, setIsLoadingGitStory] = useState(true);
-
-  useEffect(() => {
-    // Fetch GitStory SVG
-    fetch('https://gitstory.pankajk.tech/carlvictoria')
-      .then(res => res.text())
-      .then(svg => {
-        setGitStoryData(svg);
-        setIsLoadingGitStory(false);
-      })
-      .catch(err => {
-        console.error('Failed to fetch GitStory:', err);
-        setIsLoadingGitStory(false);
-      });
-  }, []);
-
   // TODO: Replace with actual GitHub API call
   const githubStats: GitHubStats = {
     name: 'CarlVictoria',
     bio: 'Full-Stack Developer',
     public_repos: 24,
     followers: 48,
-    following: 32
+    following: 32,
+    total_stars: 156,
+    total_forks: 42,
+    contributions_2025: 255
   };
 
   const techStackIcons = {
@@ -51,7 +39,9 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
       { name: 'TypeScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
       { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg' },
       { name: 'HTML5', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg' },
-      { name: 'CSS3', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg' }
+      { name: 'CSS3', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg' },
+      { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
+      { name: 'Vue.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg' }
     ],
     backend: [
       { name: 'Node.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
@@ -62,12 +52,9 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
     database: [
       { name: 'MySQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
       { name: 'MongoDB', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg' },
-      { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' }
-    ],
-    tools: [
-      { name: 'Git', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
-      { name: 'VS Code', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg' },
-      { name: 'Figma', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg' }
+      { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
+      { name: 'Redis', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg' },
+      { name: 'SQLite', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg' }
     ]
   };
 
@@ -154,16 +141,24 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
                 </span>
               </div>
               <div className="flex justify-between">
+                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>ROLE:</span>
+                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>Full-Stack Dev</span>
+              </div>
+              <div className="flex justify-between">
                 <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>FOCUS:</span>
-                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>Scalable apps</span>
+                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>Web Apps</span>
               </div>
               <div className="flex justify-between">
                 <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>LANG:</span>
-                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>TS, Python, PHP</span>
+                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>TS, Python</span>
               </div>
               <div className="flex justify-between">
-                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>MODE:</span>
-                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>Full-Stack</span>
+                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>LOCATION:</span>
+                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>Philippines</span>
+              </div>
+              <div className="flex justify-between">
+                <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>TIMEZONE:</span>
+                <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>UTC+8</span>
               </div>
             </div>
           </div>
@@ -209,25 +204,46 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
             }}
           >
             <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.75rem', fontFamily: 'monospace' }} className="mb-3">
-              ~$ gh story --user carlvictoria
+              ~$ gh activity --summary
             </p>
             
-            {/* GitStory Visualization */}
-            <div className="flex items-center justify-center overflow-hidden" style={{ height: '180px' }}>
-              {isLoadingGitStory ? (
-                <div style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.75rem', fontFamily: 'monospace' }}>
-                  Loading GitStory...
+            {/* GitHub Activity Summary */}
+            <div className="space-y-3" style={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.7rem' }}>CONTRIBUTIONS</span>
+                  <p style={{ color: isDarkMode ? 'rgba(255, 0, 230, 1)' : 'rgba(200, 0, 180, 1)', fontSize: '1.3rem', fontWeight: 'bold' }}>
+                    {githubStats.contributions_2025}
+                  </p>
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)', fontSize: '0.65rem' }}>in 2025</span>
                 </div>
-              ) : gitStoryData ? (
-                <div 
-                  dangerouslySetInnerHTML={{ __html: gitStoryData }}
-                  style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                />
-              ) : (
-                <div style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)', fontSize: '0.75rem', fontFamily: 'monospace' }}>
-                  Failed to load GitStory
+                <div>
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.7rem' }}>FOLLOWING</span>
+                  <p style={{ color: isDarkMode ? 'rgba(255, 0, 230, 1)' : 'rgba(200, 0, 180, 1)', fontSize: '1.3rem', fontWeight: 'bold' }}>
+                    {githubStats.following}
+                  </p>
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)', fontSize: '0.65rem' }}>developers</span>
                 </div>
-              )}
+              </div>
+              
+              <div className="pt-2" style={{ borderTop: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}` }}>
+                <div className="flex justify-between mb-2">
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.7rem' }}>TOTAL STARS:</span>
+                  <span style={{ color: isDarkMode ? 'rgba(255, 0, 230, 1)' : 'rgba(200, 0, 180, 1)', fontWeight: 'bold' }}>⭐ {githubStats.total_stars}</span>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <span style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.7rem' }}>TOTAL FORKS:</span>
+                  <span style={{ color: isDarkMode ? 'rgba(255, 0, 230, 1)' : 'rgba(200, 0, 180, 1)', fontWeight: 'bold' }}>🔱 {githubStats.total_forks}</span>
+                </div>
+              </div>
+              
+              <div className="pt-2" style={{ borderTop: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}` }}>
+                <p style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.7rem', marginBottom: '0.5rem' }}>ACTIVITY SCORE</p>
+                <div style={{ background: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ background: 'linear-gradient(90deg, rgba(255, 0, 230, 1) 0%, rgba(0, 217, 255, 1) 100%)', height: '100%', width: '83%', borderRadius: '4px' }}></div>
+                </div>
+                <p style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)', fontSize: '0.65rem', marginTop: '0.25rem' }}>83% active this year</p>
+              </div>
             </div>
           </div>
         </div>
@@ -315,7 +331,7 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
                   CORE:
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {[...techStackIcons.frontend.slice(0, 3), techStackIcons.backend[0]].map((tech) => (
+                  {techStackIcons.frontend.map((tech) => (
                     <div
                       key={tech.name}
                       className="group cursor-pointer transition-all hover:-translate-y-1"
@@ -349,38 +365,6 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {techStackIcons.database.map((tech) => (
-                    <div
-                      key={tech.name}
-                      className="group cursor-pointer transition-all hover:-translate-y-1"
-                      style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))' }}
-                      title={tech.name}
-                    >
-                      <img 
-                        src={tech.icon} 
-                        alt={tech.name} 
-                        className="w-7 h-7"
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              {/* TOOLS */}
-              <div>
-                <p 
-                  style={{ 
-                    color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', 
-                    fontSize: '0.75rem', 
-                    fontFamily: 'monospace',
-                    borderBottom: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
-                    paddingBottom: '0.25rem'
-                  }} 
-                  className="mb-2"
-                >
-                  TOOLS:
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {techStackIcons.tools.map((tech) => (
                     <div
                       key={tech.name}
                       className="group cursor-pointer transition-all hover:-translate-y-1"

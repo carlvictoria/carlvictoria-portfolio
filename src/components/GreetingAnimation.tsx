@@ -7,6 +7,7 @@ import FloatingStars from './FloatingStars';
 export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean }) {
   const [displayText, setDisplayText] = useState('');
   const [showFinal, setShowFinal] = useState(false);
+  const [typedText, setTypedText] = useState('');
   const [moveToLeft, setMoveToLeft] = useState(false);
   const [moveToTop, setMoveToTop] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(isDarkMode);
@@ -38,11 +39,22 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
           clearInterval(interval);
           setTimeout(() => {
             setShowFinal(true);
-            setTimeout(() => {
-              setMoveToLeft(true);
-              setTimeout(() => setMoveToTop(true), 1000);
+            // Start typing the final text letter by letter
+            const finalText = 'C:\\Users\\CarlVictoria>';
+            let charIndex = 0;
+            const typingInterval = setInterval(() => {
+              if (charIndex < finalText.length) {
+                setTypedText(finalText.substring(0, charIndex + 1));
+                charIndex++;
+              } else {
+                clearInterval(typingInterval);
+                setTimeout(() => {
+                  setMoveToLeft(true);
+                  setTimeout(() => setMoveToTop(true), 1000);
+                }, 100);
+              }
             }, 100);
-          }, 100);
+          }, 50);
         }
       }
     }, 80);
@@ -70,10 +82,10 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
           transition: 'color 0.3s ease, transform 1500ms ease-in-out'
         }}
       >
-        <span>{showFinal ? <>C:\Users\CarlVictoria{'>'}</> : displayText}</span>
-        {showFinal && <span className="blinking-cursor" style={{ color: currentTheme ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease' }}>_</span>}
+        <span>{showFinal ? <>{typedText}</> : displayText}</span>
+        {showFinal && typedText === 'C:\\Users\\CarlVictoria>' && <span className="blinking-cursor" style={{ color: currentTheme ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease' }}>_</span>}
       </h1>
-      {showFinal && (
+      {showFinal && typedText === 'C:\\Users\\CarlVictoria>' && (
         <div className="animate-fade-in">
           <ContentBox onThemeChange={setCurrentTheme} />
         </div>
