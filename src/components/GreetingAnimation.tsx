@@ -3,11 +3,14 @@
 import { useState, useEffect } from 'react';
 import ContentBox from './ContentBox';
 import FloatingStars from './FloatingStars';
+import Image from 'next/image';
+import folderIcon from '@/assets/folder.png';
 
 export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean }) {
   const [displayText, setDisplayText] = useState('');
   const [showFinal, setShowFinal] = useState(false);
   const [typedText, setTypedText] = useState('');
+  const [showFolder, setShowFolder] = useState(false);
   const [moveToLeft, setMoveToLeft] = useState(false);
   const [moveToTop, setMoveToTop] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(isDarkMode);
@@ -15,6 +18,11 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
   useEffect(() => {
     setCurrentTheme(isDarkMode);
   }, [isDarkMode]);
+
+  const handleFolderClick = () => {
+    setMoveToLeft(true);
+    setTimeout(() => setMoveToTop(true), 1000);
+  };
 
   useEffect(() => {
     const greetings = [
@@ -49,9 +57,8 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
               } else {
                 clearInterval(typingInterval);
                 setTimeout(() => {
-                  setMoveToLeft(true);
-                  setTimeout(() => setMoveToTop(true), 1000);
-                }, 100);
+                  setShowFolder(true);
+                }, 300);
               }
             }, 100);
           }, 50);
@@ -83,9 +90,25 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
         }}
       >
         <span>{showFinal ? <>{typedText}</> : displayText}</span>
-        {showFinal && typedText === 'C:\\Users\\CarlVictoria>' && <span className="blinking-cursor" style={{ color: currentTheme ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease' }}>_</span>}
+        {showFinal && typedText === 'C:\\Users\\CarlVictoria>' && !showFolder && <span className="blinking-cursor" style={{ color: currentTheme ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease' }}>_</span>}
       </h1>
-      {showFinal && typedText === 'C:\\Users\\CarlVictoria>' && (
+      
+      {showFolder && !moveToTop && (
+        <div 
+          className="mt-8 cursor-pointer transition-all duration-300 hover:scale-110 animate-fade-in"
+          onClick={handleFolderClick}
+        >
+          <Image 
+            src={folderIcon} 
+            alt="Open Portfolio" 
+            width={120} 
+            height={120}
+            className="drop-shadow-2xl"
+          />
+        </div>
+      )}
+      
+      {showFinal && typedText === 'C:\\Users\\CarlVictoria>' && moveToTop && (
         <div className="animate-fade-in">
           <ContentBox onThemeChange={setCurrentTheme} />
         </div>
