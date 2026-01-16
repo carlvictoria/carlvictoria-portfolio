@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import ContentBox from './ContentBox';
+import FloatingStars from './FloatingStars';
 
 export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean }) {
   const [displayText, setDisplayText] = useState('');
@@ -50,12 +51,16 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
   }, []);
 
   return (
-    <div 
-      className="transition-all duration-[1000ms] ease-in-out flex flex-col items-center"
-      style={{
-        transform: moveToTop ? 'translateY(4rem)' : 'translateY(50vh)',
-      }}
-    >
+    <>
+      <FloatingStars isDarkMode={currentTheme} />
+      <div 
+        className="transition-all duration-[1000ms] ease-in-out flex flex-col items-center"
+        style={{
+          transform: moveToTop ? 'translateY(4rem)' : 'translateY(50vh)',
+          position: 'relative',
+          zIndex: 1,
+        }}
+      >
       <h1 
         className="text-5xl font-bold transition-all duration-[1500ms] ease-in-out flex items-center -mt-5"
         style={{
@@ -73,6 +78,7 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
           <ContentBox onThemeChange={setCurrentTheme} />
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
-import { User, Mail, Music, PawPrint, Building2, Sun, Moon, Keyboard, Cloud, Pencil, DollarSign, Newspaper, Film, TrendingUp, Map, MessageCircle } from 'lucide-react';
+import { User, Mail, Music, PawPrint, Building2, Sun, Moon, Keyboard, 
+        Cloud, Pencil, DollarSign, Newspaper, Film, TrendingUp, Map, MessageCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import AboutModal from './AboutModal';
 
