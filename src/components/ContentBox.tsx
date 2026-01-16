@@ -121,22 +121,39 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
         
         <div className="space-y-6">
           {/* Info Section */}
-          <div>
-            <p style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-base mb-3">
-              [INFO]
-            </p>
-            <div className="ml-6 space-y-2">
-              <p 
-                style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} 
-                className="text-lg flex items-center gap-2 cursor-pointer hover:opacity-80"
-                onClick={() => setShowAboutModal(true)}
-              >
-                <User size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /About
+          <div className="flex justify-between items-start">
+            <div>
+              <p style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-base mb-3">
+                [INFO]
               </p>
-              <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg flex items-center gap-2">
-                <Mail size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Contact
-              </p>
+              <div className="ml-6 space-y-2">
+                <p 
+                  style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} 
+                  className="text-lg flex items-center gap-2 cursor-pointer hover:opacity-80"
+                  onClick={() => setShowAboutModal(true)}
+                >
+                  <User size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /About
+                </p>
+                <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg flex items-center gap-2">
+                  <Mail size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Contact
+                </p>
+              </div>
             </div>
+            
+            <pre style={{
+              color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', 
+              fontFamily: 'monospace',
+              fontSize: '1.5rem',
+              lineHeight: '1.1',
+              transition: 'color 0.3s ease',
+              marginRight: '2rem',
+              fontWeight: 'bold'
+            }}>
+{` ____   __   ____  ____  ____  __   __    __   __  
+(  _ \\ /  \\ (  _ \\(_  _)(  __)/  \\ (  )  (  ) /  \\ 
+ ) __/(  O ) )   /  )(   ) _)(  O )/ (_/\\ )( (  O )
+(__)   \\__/ (__\\_) (__) (__)  \\__/ \\____/(__) \\__/`}
+            </pre>
           </div>
 
           {/* Projects Section */}
