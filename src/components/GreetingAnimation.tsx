@@ -20,8 +20,15 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
   }, [isDarkMode]);
 
   const handleFolderClick = () => {
+    setShowFolder(false);
     setMoveToLeft(true);
     setTimeout(() => setMoveToTop(true), 1000);
+  };
+
+  const handleClose = () => {
+    setMoveToTop(false);
+    setMoveToLeft(false);
+    setTimeout(() => setShowFolder(true), 1500);
   };
 
   useEffect(() => {
@@ -58,7 +65,7 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
                 clearInterval(typingInterval);
                 setTimeout(() => {
                   setShowFolder(true);
-                }, 300);
+                }, 100);
               }
             }, 100);
           }, 50);
@@ -110,7 +117,7 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
       
       {showFinal && typedText === 'C:\\Users\\CarlVictoria>' && moveToTop && (
         <div className="animate-fade-in">
-          <ContentBox onThemeChange={setCurrentTheme} />
+          <ContentBox onThemeChange={setCurrentTheme} onClose={handleClose} />
         </div>
       )}
       </div>

@@ -5,7 +5,7 @@ import { User, Mail, Music, PawPrint, Building2, Sun, Moon, Keyboard,
 import { useState, useEffect } from 'react';
 import AboutModal from './AboutModal';
 
-export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkMode: boolean) => void }) {
+export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?: (isDarkMode: boolean) => void; onClose?: () => void }) {
   const [isDarkMode, setIsDarkMode] = useState(true); // Moon is default (dark mode on)
   const [showAboutModal, setShowAboutModal] = useState(false);
   
@@ -73,13 +73,7 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
           transition: 'background-color 0.3s ease, border-color 0.3s ease'
         }}
       >
-        <p style={{
-          color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', 
-          fontFamily: 'var(--font-terminal)',
-          transition: 'color 0.3s ease'
-        }} className="text-center flex-1">
-          CMD
-        </p>
+        {/* Theme Toggle on Left */}
         <div 
           className="relative flex gap-0 items-center cursor-pointer rounded-full border border-gray-600 bg-gray-700"
           onClick={() => setIsDarkMode(!isDarkMode)}
@@ -113,6 +107,22 @@ export default function ContentBox({ onThemeChange }: { onThemeChange?: (isDarkM
             }}
           />
         </div>
+        
+        {/* Title */}
+        <p style={{
+          color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', 
+          fontFamily: 'var(--font-terminal)',
+          transition: 'color 0.3s ease'
+        }} className="text-center flex-1">
+          CMD
+        </p>
+        
+        {/* Close Button on Right */}
+        <div 
+          className="w-3 h-3 rounded-full bg-red-500 cursor-pointer hover:bg-red-600 transition-colors"
+          onClick={onClose}
+          style={{ boxShadow: '0 0 4px rgba(239, 68, 68, 0.6)' }}
+        />
       </div>
       <div className="p-8 break-words"> 
         <p style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-3xl font-bold mb-6 ml-10">
