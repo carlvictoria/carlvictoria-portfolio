@@ -329,14 +329,16 @@ export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?:
       {showAboutModal && (
         <AboutModal 
           isDarkMode={isDarkMode} 
-          onClose={() => setShowAboutModal(false)} 
+          onClose={() => setShowAboutModal(false)}
+          minimizedIndex={0}
         />
       )}
       
       {showTypingTest && (
         <TypingTestModal 
           isDarkMode={isDarkMode} 
-          onClose={() => setShowTypingTest(false)} 
+          onClose={() => setShowTypingTest(false)}
+          minimizedIndex={showAboutModal ? 1 : 0}
         />
       )}
     </>

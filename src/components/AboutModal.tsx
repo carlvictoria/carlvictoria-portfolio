@@ -6,6 +6,7 @@ import Modal from './Modal';
 interface AboutModalProps {
   isDarkMode: boolean;
   onClose: () => void;
+  minimizedIndex?: number;
 }
 
 interface GitHubStats {
@@ -19,7 +20,7 @@ interface GitHubStats {
   contributions_2025: number;
 }
 
-export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
+export default function AboutModal({ isDarkMode, onClose, minimizedIndex = 0 }: AboutModalProps) {
   // TODO: Replace with actual GitHub API call
   const githubStats: GitHubStats = {
     name: 'CarlVictoria',
@@ -68,6 +69,7 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
       minHeight="550px"
       showTypingAnimation={true}
       typingText="about me"
+      minimizedIndex={minimizedIndex}
     >
       {/* Content */}
       <>

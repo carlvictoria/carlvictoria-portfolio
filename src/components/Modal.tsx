@@ -12,6 +12,7 @@ interface ModalProps {
   minHeight?: string;
   showTypingAnimation?: boolean;
   typingText?: string;
+  minimizedIndex?: number;
 }
 
 export default function Modal({ 
@@ -23,7 +24,8 @@ export default function Modal({
   minWidth = '1020px',
   minHeight = '800px',
   showTypingAnimation = false,
-  typingText = 'text'
+  typingText = 'text',
+  minimizedIndex = 0
 }: ModalProps) {
   const [isMinimized, setIsMinimized] = useState(false);
   const [typedText, setTypedText] = useState('');
@@ -118,12 +120,13 @@ export default function Modal({
   if (isMinimized) {
     return (
       <div 
-        className="fixed bottom-4 left-4 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
+        className="fixed bottom-4 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
         style={{
           backgroundColor: isDarkMode ? 'var(--cmd-background)' : 'var(--cmd-background-l)',
           boxShadow: '0 10px 25px rgba(0, 0, 0, 0.3)',
           border: '1px solid',
-          borderColor: isDarkMode ? '#4b5563' : '#D4C5A9'
+          borderColor: isDarkMode ? '#4b5563' : '#D4C5A9',
+          left: `${16 + (minimizedIndex * 150)}px`
         }}
         onClick={() => setIsMinimized(false)}
       >

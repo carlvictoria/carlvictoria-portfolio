@@ -6,6 +6,7 @@ import Modal from './Modal';
 interface TypingTestModalProps {
   isDarkMode: boolean;
   onClose: () => void;
+  minimizedIndex?: number;
 }
 
 const sentences = [
@@ -18,10 +19,20 @@ const sentences = [
   "Learning new skills requires patience and practice",
   "The keyboard is a programmer's best friend",
   "Version control saves countless hours of work",
-  "Documentation is as important as the code itself"
+  "Documentation is as important as the code itself",
+  "Building software is like constructing a complex puzzle where every piece must fit perfectly together to create something meaningful",
+  "Developers spend more time reading code than writing it, which is why clarity and simplicity should always be prioritized over cleverness",
+  "The best programmers are not those who write the most code, but those who solve problems with the least amount of code necessary",
+  "Testing your application thoroughly before deployment can save you from embarrassing bugs and frustrated users down the line",
+  "Open source software has revolutionized the way we build applications by allowing developers worldwide to collaborate and share knowledge",
+  "Learning to code is not just about memorizing syntax, it's about developing problem-solving skills and logical thinking patterns",
+  "Modern web development requires understanding of both frontend and backend technologies to create seamless user experiences",
+  "Artificial intelligence and machine learning are transforming industries by automating complex tasks that once required human intervention",
+  "Writing efficient algorithms can significantly improve application performance and provide better user experiences for everyone",
+  "Continuous learning is essential in technology because new frameworks, languages, and tools emerge constantly in our rapidly evolving field"
 ];
 
-export default function TypingTestModal({ isDarkMode, onClose }: TypingTestModalProps) {
+export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 0 }: TypingTestModalProps) {
   const [currentSentence, setCurrentSentence] = useState('');
   const [userInput, setUserInput] = useState('');
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -129,6 +140,7 @@ export default function TypingTestModal({ isDarkMode, onClose }: TypingTestModal
       minHeight="400px"
       showTypingAnimation={true}
       typingText="typing-test.exe"
+      minimizedIndex={minimizedIndex}
     >
       <div className="flex flex-col h-full">
         <p 
