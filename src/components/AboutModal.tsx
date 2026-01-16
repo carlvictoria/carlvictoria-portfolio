@@ -72,7 +72,7 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
       {/* Content */}
       <>
         {/* Header: Name with Paint Splash */}
-        <div className="mb-4">
+        <div className="-mb-4">
           <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.875rem', fontFamily: 'monospace' }} className="mb-3">
             ~$ sys.profile --load
           </p>
@@ -99,19 +99,19 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
                 fontFamily: 'system-ui, -apple-system, sans-serif'
               }}
             >
-              CarlVictoria_<span className="animate-pulse" style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}></span>
+              C:\Users\CarlVictoria_<span className="animate-pulse" style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}></span>
             </h1>
           </div>
           
-          <p 
+          <pre 
             style={{ 
               color: isDarkMode ? 'rgba(0, 255, 136, 0.7)' : 'rgba(0, 128, 68, 0.8)',
               fontSize: '0.9rem',
               fontFamily: 'monospace'
             }}
           >
-            @carlvictoria · Full-Stack Developer
-          </p>
+            {'\n'}
+          </pre>
         </div>
 
         {/* Bento Grid Layout */}
@@ -296,45 +296,167 @@ export default function AboutModal({ isDarkMode, onClose }: AboutModalProps) {
             borderBottom: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`
           }}
         >
-          <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.75rem', fontFamily: 'monospace' }} className="mb-4">
+          <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.75rem', fontFamily: 'monospace' }} className="mb-3">
             ~$ cat about.txt
           </p>
           
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <p 
-                className="leading-relaxed mb-3"
-                style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.95rem', lineHeight: '1.6' }}
+          <div className="grid grid-cols-2 gap-4">
+            {/* Left: Bio Section */}
+            <div className="space-y-3">
+              <div 
+                className="p-3 rounded-lg"
+                style={{ 
+                  background: isDarkMode ? 'rgba(0, 255, 136, 0.05)' : 'rgba(0, 180, 90, 0.05)',
+                  border: `1px solid ${isDarkMode ? 'rgba(0, 255, 136, 0.2)' : 'rgba(0, 180, 90, 0.2)'}`
+                }}
               >
-                Developer with a focus on clean architecture and developer experience.
-                Building tools that make workflows faster and code more maintainable.
-              </p>
+                <div className="flex items-start gap-2 mb-2">
+                  <span style={{ fontSize: '1.2rem' }}>💡</span>
+                  <div>
+                    <p style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.65rem', fontFamily: 'monospace', marginBottom: '0.25rem' }}>
+                      PHILOSOPHY
+                    </p>
+                    <p 
+                      className="leading-relaxed"
+                      style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.85rem', lineHeight: '1.5' }}
+                    >
+                      Clean architecture meets developer experience. Building tools that make workflows faster and code more maintainable.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div 
+                className="p-3 rounded-lg"
+                style={{ 
+                  background: isDarkMode ? 'rgba(0, 217, 255, 0.05)' : 'rgba(0, 150, 200, 0.05)',
+                  border: `1px solid ${isDarkMode ? 'rgba(0, 217, 255, 0.2)' : 'rgba(0, 150, 200, 0.2)'}`
+                }}
+              >
+                <div className="flex items-start gap-2">
+                  <span style={{ fontSize: '1.2rem' }}>🔬</span>
+                  <div>
+                    <p style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.65rem', fontFamily: 'monospace', marginBottom: '0.25rem' }}>
+                      CURRENTLY EXPLORING
+                    </p>
+                    <div className="flex flex-wrap gap-1.5 mt-1">
+                      <span 
+                        className="px-2 py-0.5 rounded text-xs"
+                        style={{ 
+                          background: isDarkMode ? 'rgba(0, 217, 255, 0.2)' : 'rgba(0, 150, 200, 0.2)',
+                          color: isDarkMode ? 'rgba(0, 217, 255, 1)' : 'rgba(0, 150, 200, 1)',
+                          fontSize: '0.7rem',
+                          fontFamily: 'monospace'
+                        }}
+                      >
+                        GraphQL
+                      </span>
+                      <span 
+                        className="px-2 py-0.5 rounded text-xs"
+                        style={{ 
+                          background: isDarkMode ? 'rgba(255, 136, 0, 0.2)' : 'rgba(200, 100, 0, 0.2)',
+                          color: isDarkMode ? 'rgba(255, 170, 0, 1)' : 'rgba(200, 100, 0, 1)',
+                          fontSize: '0.7rem',
+                          fontFamily: 'monospace'
+                        }}
+                      >
+                        Rust
+                      </span>
+                      <span 
+                        className="px-2 py-0.5 rounded text-xs"
+                        style={{ 
+                          background: isDarkMode ? 'rgba(255, 0, 230, 0.2)' : 'rgba(180, 0, 160, 0.2)',
+                          color: isDarkMode ? 'rgba(255, 0, 230, 1)' : 'rgba(180, 0, 160, 1)',
+                          fontSize: '0.7rem',
+                          fontFamily: 'monospace'
+                        }}
+                      >
+                        DevOps
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             
-            <div>
-              <p style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)', fontSize: '0.85rem', fontFamily: 'monospace' }} className="mb-2">
-                // What I do:
+            {/* Right: Services Grid */}
+            <div className="flex flex-col h-full">
+              <p style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)', fontSize: '0.7rem', fontFamily: 'monospace', marginBottom: '0.5rem' }} className="mb-2">
+                // SERVICES & EXPERTISE
               </p>
-              <div className="space-y-1.5" style={{ fontSize: '0.9rem' }}>
-                <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>
-                  <span style={{ color: isDarkMode ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 180, 90, 1)' }}>→</span> Full-stack web applications
-                </p>
-                <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>
-                  <span style={{ color: isDarkMode ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 180, 90, 1)' }}>→</span> CLI tools and automation
-                </p>
-                <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>
-                  <span style={{ color: isDarkMode ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 180, 90, 1)' }}>→</span> API design & integration
-                </p>
-                <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>
-                  <span style={{ color: isDarkMode ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 180, 90, 1)' }}>→</span> UI/UX prototyping
-                </p>
+              <div className="grid grid-cols-2 gap-2 flex-1">
+                <div 
+                  className="p-2.5 rounded"
+                  style={{ 
+                    background: isDarkMode ? 'rgba(0, 255, 136, 0.08)' : 'rgba(0, 180, 90, 0.08)',
+                    border: `1px solid ${isDarkMode ? 'rgba(0, 255, 136, 0.3)' : 'rgba(0, 180, 90, 0.3)'}`
+                  }}
+                >
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span style={{ fontSize: '1rem' }}>🌐</span>
+                    <span style={{ color: isDarkMode ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 180, 90, 1)', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace' }}>
+                      WEB
+                    </span>
+                  </div>
+                  <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.7rem', lineHeight: '1.3' }}>
+                    Full-stack applications
+                  </p>
+                </div>
+                
+                <div 
+                  className="p-2.5 rounded"
+                  style={{ 
+                    background: isDarkMode ? 'rgba(0, 217, 255, 0.08)' : 'rgba(0, 150, 200, 0.08)',
+                    border: `1px solid ${isDarkMode ? 'rgba(0, 217, 255, 0.3)' : 'rgba(0, 150, 200, 0.3)'}`
+                  }}
+                >
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span style={{ fontSize: '1rem' }}>⚙️</span>
+                    <span style={{ color: isDarkMode ? 'rgba(0, 217, 255, 1)' : 'rgba(0, 150, 200, 1)', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace' }}>
+                      CLI
+                    </span>
+                  </div>
+                  <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.7rem', lineHeight: '1.3' }}>
+                    Tools & automation
+                  </p>
+                </div>
+                
+                <div 
+                  className="p-2.5 rounded"
+                  style={{ 
+                    background: isDarkMode ? 'rgba(255, 0, 230, 0.08)' : 'rgba(180, 0, 160, 0.08)',
+                    border: `1px solid ${isDarkMode ? 'rgba(255, 0, 230, 0.3)' : 'rgba(180, 0, 160, 0.3)'}`
+                  }}
+                >
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span style={{ fontSize: '1rem' }}>🔌</span>
+                    <span style={{ color: isDarkMode ? 'rgba(255, 0, 230, 1)' : 'rgba(180, 0, 160, 1)', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace' }}>
+                      API
+                    </span>
+                  </div>
+                  <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.7rem', lineHeight: '1.3' }}>
+                    Design & integration
+                  </p>
+                </div>
+                
+                <div 
+                  className="p-2.5 rounded"
+                  style={{ 
+                    background: isDarkMode ? 'rgba(255, 170, 0, 0.08)' : 'rgba(200, 100, 0, 0.08)',
+                    border: `1px solid ${isDarkMode ? 'rgba(255, 170, 0, 0.3)' : 'rgba(200, 100, 0, 0.3)'}`
+                  }}
+                >
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span style={{ fontSize: '1rem' }}>🎨</span>
+                    <span style={{ color: isDarkMode ? 'rgba(255, 170, 0, 1)' : 'rgba(200, 100, 0, 1)', fontSize: '0.75rem', fontWeight: 'bold', fontFamily: 'monospace' }}>
+                      UI/UX
+                    </span>
+                  </div>
+                  <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontSize: '0.7rem', lineHeight: '1.3' }}>
+                    Prototyping
+                  </p>
+                </div>
               </div>
-              <p 
-                className="mt-3 italic"
-                style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)', fontSize: '0.85rem' }}
-              >
-                Currently exploring: GraphQL, Rust, and DevOps workflows.
-              </p>
             </div>
           </div>
         </div>
