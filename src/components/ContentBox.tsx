@@ -8,6 +8,7 @@ import TypingTestModal from './TypingTestModal';
 // Import MusicPlayerModal
 import MusicPlayerModal from './MusicPlayerModal';
 import CryptoModal from './CryptoModal';
+import WeatherModal from './WeatherModal';
 
 export default function ContentBox({ onThemeChange, onClose, onMusicStateChange }: { onThemeChange?: (isDarkMode: boolean) => void; onClose?: () => void; onMusicStateChange?: (isPlaying: boolean) => void }) {
   const [isDarkMode, setIsDarkMode] = useState(true); // Moon is default (dark mode on)
@@ -15,6 +16,7 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
   const [showTypingTest, setShowTypingTest] = useState(false);
   const [showMusicPlayer, setShowMusicPlayer] = useState(false);
   const [showCrypto, setShowCrypto] = useState(false);
+  const [showWeatherModal, setShowWeatherModal] = useState(false);
   
   const [loadingStates, setLoadingStates] = useState({
     music: true,
@@ -227,7 +229,7 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
                   )}
                 </p>
               </div>
-              <div className="flex gap-4">
+              <div className="flex gap-4 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => setShowWeatherModal(true)}>
                 <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
                   <Cloud size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Weather App
                 </p>
@@ -367,6 +369,14 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
           isDarkMode={isDarkMode} 
           onClose={() => setShowCrypto(false)}
           minimizedIndex={(showAboutModal ? 1 : 0) + (showTypingTest ? 1 : 0) + (showMusicPlayer ? 1 : 0)}
+        />
+      )}
+      
+      {showWeatherModal && (
+        <WeatherModal 
+          onClose={() => setShowWeatherModal(false)}
+          isDarkMode={isDarkMode}
+          showTypingAnimation={true}
         />
       )}
     </>
