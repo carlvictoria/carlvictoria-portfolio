@@ -215,7 +215,7 @@ export default function MusicPlayerModal({ onClose, isDarkMode, onMusicStateChan
   };
 
   return (
-    <Modal isDarkMode={isDarkMode} onClose={onClose} title="Music Player" width="750px" minWidth="700px" minHeight="400px">
+    <Modal isDarkMode={isDarkMode} onClose={onClose} title="Music Player" width="750px" minWidth="700px" minHeight="400px" showTypingAnimation={true} typingText="musicplayer.exe">
       <div 
         className="flex gap-4 relative overflow-hidden"
         style={{

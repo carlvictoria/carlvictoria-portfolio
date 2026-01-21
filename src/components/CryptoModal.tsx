@@ -44,15 +44,27 @@ interface CryptoData {
   };
 }
 
+interface SearchSuggestion {
+  id: string;
+  name: string;
+  symbol: string;
+  thumb: string;
+}
+
 export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }: CryptoModalProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [cryptoData, setCryptoData] = useState<CryptoData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
+  const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(null);
+  const [rateLimited, setRateLimited] = useState(false);
 
-  const searchCrypto = async () => {
-    if (!searchQuery.trim()) {
+  const searchCrypto = async (coinId?: string, queryOverride?: string) => {
+    const query = queryOverride || searchQuery;
+    if (!query.trim() && !coinId) {
       setError('Please enter a cryptocurrency name or symbol');
       return;
     }
@@ -60,28 +72,41 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
     setIsLoading(true);
     setError(null);
     setHasSearched(true);
+    setShowSuggestions(false);
 
     try {
-      // First, search for the coin ID using the search query
-      const searchResponse = await fetch(`https://api.coingecko.com/api/v3/search?query=${searchQuery.trim()}`);
+      let targetCoinId = coinId;
       
-      if (!searchResponse.ok) {
-        throw new Error('Failed to search for cryptocurrency');
-      }
+      if (!targetCoinId) {
+        // First, search for the coin ID using the search query
+        const searchResponse = await fetch(`https://api.coingecko.com/api/v3/search?query=${query.trim()}`);
+        
+        if (searchResponse.status === 429) {
+          throw new Error('API rate limit exceeded. Please wait a moment and try again.');
+        }
+        
+        if (!searchResponse.ok) {
+          throw new Error('Failed to search for cryptocurrency');
+        }
 
-      const searchData = await searchResponse.json();
-      
-      if (!searchData.coins || searchData.coins.length === 0) {
-        throw new Error(`No cryptocurrency found matching "${searchQuery}"`);
-      }
+        const searchData = await searchResponse.json();
+        
+        if (!searchData.coins || searchData.coins.length === 0) {
+          throw new Error(`No cryptocurrency found matching "${query}"`);
+        }
 
-      // Get the first matching coin
-      const coinId = searchData.coins[0].id;
+        // Get the first matching coin
+        targetCoinId = searchData.coins[0].id;
+      }
 
       // Fetch detailed data for the coin
       const dataResponse = await fetch(
-        `https://api.coingecko.com/api/v3/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`
+        `https://api.coingecko.com/api/v3/coins/${targetCoinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true`
       );
+
+      if (dataResponse.status === 429) {
+        throw new Error('API rate limit exceeded. Please wait a moment and try again.');
+      }
 
       if (!dataResponse.ok) {
         throw new Error('Failed to fetch cryptocurrency data');
@@ -106,6 +131,81 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const fetchSuggestions = async (query: string) => {
+    if (query.length < 3) { // Increased minimum length to reduce API calls
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    if (rateLimited) {
+      // If we're rate limited, show some popular default suggestions
+      const popularCoins = [
+        { id: 'bitcoin', name: 'Bitcoin', symbol: 'BTC', thumb: '' },
+        { id: 'ethereum', name: 'Ethereum', symbol: 'ETH', thumb: '' },
+        { id: 'solana', name: 'Solana', symbol: 'SOL', thumb: '' },
+        { id: 'dogecoin', name: 'Dogecoin', symbol: 'DOGE', thumb: '' },
+        { id: 'cardano', name: 'Cardano', symbol: 'ADA', thumb: '' }
+      ].filter(coin => 
+        coin.name.toLowerCase().includes(query.toLowerCase()) || 
+        coin.symbol.toLowerCase().includes(query.toLowerCase())
+      );
+      
+      setSuggestions(popularCoins);
+      setShowSuggestions(popularCoins.length > 0);
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://api.coingecko.com/api/v3/search?query=${query}`);
+      
+      if (response.status === 429) {
+        // Rate limited - switch to offline mode
+        setRateLimited(true);
+        setShowSuggestions(false);
+        return;
+      }
+      
+      if (response.ok) {
+        const data = await response.json();
+        const topSuggestions = data.coins.slice(0, 5).map((coin: any) => ({
+          id: coin.id,
+          name: coin.name,
+          symbol: coin.symbol.toUpperCase(),
+          thumb: coin.thumb
+        }));
+        setSuggestions(topSuggestions);
+        setShowSuggestions(true);
+      }
+    } catch (error) {
+      // Silently fail for suggestions and disable them temporarily
+      setRateLimited(true);
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleInputChange = (value: string) => {
+    setSearchQuery(value);
+    
+    // Clear previous debounce timer
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+    }
+    
+    // Set new debounce timer - wait 800ms before making API call
+    const newTimer = setTimeout(() => {
+      fetchSuggestions(value);
+    }, 800);
+    
+    setDebounceTimer(newTimer);
+  };
+
+  const selectSuggestion = (suggestion: SearchSuggestion) => {
+    setSearchQuery(suggestion.name);
+    setShowSuggestions(false);
+    searchCrypto(suggestion.id, suggestion.name);
   };
 
   const handleSearch = (e: React.FormEvent) => {
@@ -225,23 +325,81 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
         </p>
 
         {/* Search Section */}
-        <form onSubmit={handleSearch} className="mb-8">
+        <form onSubmit={handleSearch} className="mb-8 relative">
           <div className="flex gap-3">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 p-3 rounded-lg outline-none"
-              style={{
-                background: isDarkMode ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.6)',
-                border: `2px solid ${isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)'}`,
-                color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)',
-                fontFamily: 'monospace',
-                fontSize: '1rem'
-              }}
-              placeholder="Enter crypto name or symbol (e.g., bitcoin, eth)..."
-              disabled={isLoading}
-            />
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleInputChange(e.target.value)}
+                onFocus={() => searchQuery.length >= 3 && setShowSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                className="w-full p-3 rounded-lg outline-none"
+                style={{
+                  background: isDarkMode ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.6)',
+                  border: `2px solid ${isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)'}`,
+                  color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)',
+                  fontFamily: 'monospace',
+                  fontSize: '1rem'
+                }}
+                placeholder="Enter crypto name or symbol (min. 3 chars for suggestions)..."
+                disabled={isLoading}
+              />
+              
+              {/* Search Suggestions Dropdown */}
+              {showSuggestions && suggestions.length > 0 && (
+                <div 
+                  className="absolute top-full left-0 right-0 mt-1 rounded-lg border z-10"
+                  style={{
+                    background: isDarkMode ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                    border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'}`,
+                    backdropFilter: 'blur(10px)'
+                  }}
+                >
+                  {rateLimited && (
+                    <div 
+                      className="p-2 text-center"
+                      style={{
+                        background: isDarkMode ? 'rgba(255, 204, 0, 0.1)' : 'rgba(255, 204, 0, 0.1)',
+                        borderBottom: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                        color: isDarkMode ? 'rgba(255, 204, 0, 1)' : 'rgba(255, 204, 0, 1)',
+                        fontFamily: 'monospace',
+                        fontSize: '0.75rem'
+                      }}
+                    >
+                      ⚠ API limit reached - showing popular coins
+                    </div>
+                  )}
+                  {suggestions.map((suggestion) => (
+                    <div
+                      key={suggestion.id}
+                      onClick={() => selectSuggestion(suggestion)}
+                      className="flex items-center gap-3 p-3 cursor-pointer transition-all hover:opacity-80"
+                      style={{
+                        borderBottom: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                        color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'
+                      }}
+                    >
+                      {suggestion.thumb ? (
+                        <img src={suggestion.thumb} alt={suggestion.symbol} className="w-6 h-6 rounded-full" />
+                      ) : (
+                        <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)' }}>
+                          <DollarSign size={12} style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }} />
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <span style={{ fontFamily: 'monospace', fontSize: '0.875rem', fontWeight: 'bold' }}>
+                          {suggestion.symbol}
+                        </span>
+                        <span style={{ fontFamily: 'monospace', fontSize: '0.875rem', marginLeft: '8px', opacity: 0.7 }}>
+                          {suggestion.name}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             <button
               type="submit"
               disabled={isLoading}
@@ -263,14 +421,20 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
         </form>
 
         {/* Main Content Area */}
-        <div className="flex-1 min-h-0">
+        <div 
+          className="flex-1"
+          style={{ 
+            minHeight: '400px' // Fixed minimum height to match when content is present
+          }}
+        >
           {!hasSearched ? (
             <div 
               className="flex flex-col items-center justify-center h-full"
               style={{
                 background: isDarkMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)',
                 border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
-                borderRadius: '8px'
+                borderRadius: '8px',
+                minHeight: '400px' // Same minimum height as content
               }}
             >
               <DollarSign size={48} style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', opacity: 0.5, marginBottom: '16px' }} />
@@ -287,7 +451,8 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
               style={{
                 background: isDarkMode ? 'rgba(239, 68, 68, 0.1)' : 'rgba(220, 38, 38, 0.1)',
                 border: `1px solid ${isDarkMode ? 'rgba(239, 68, 68, 0.3)' : 'rgba(220, 38, 38, 0.3)'}`,
-                borderRadius: '8px'
+                borderRadius: '8px',
+                minHeight: '400px'
               }}
             >
               <TrendingDown size={48} style={{ color: isDarkMode ? 'rgba(239, 68, 68, 1)' : 'rgba(220, 38, 38, 1)', marginBottom: '16px' }} />
@@ -301,7 +466,8 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
               style={{
                 background: isDarkMode ? 'rgba(255, 204, 0, 0.1)' : 'rgba(255, 204, 0, 0.1)',
                 border: `1px solid ${isDarkMode ? 'rgba(255, 204, 0, 0.3)' : 'rgba(255, 204, 0, 0.3)'}`,
-                borderRadius: '8px'
+                borderRadius: '8px',
+                minHeight: '400px'
               }}
             >
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 mb-4" style={{ borderColor: isDarkMode ? 'rgba(255, 204, 0, 1)' : 'rgba(255, 204, 0, 1)' }}></div>
@@ -310,7 +476,7 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
               </p>
             </div>
           ) : cryptoData && (
-            <div className="h-full flex flex-col">
+            <div className="h-full flex flex-col" style={{ minHeight: '400px' }}>
               {/* Crypto Info Header */}
               <div className="mb-6 flex items-center justify-between">
                 <div>
@@ -346,10 +512,11 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
 
               {/* Chart */}
               <div 
-                className="flex-1 min-h-0 p-4 rounded-lg"
+                className="flex-1 p-4 rounded-lg"
                 style={{
                   background: isDarkMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)',
-                  border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`
+                  border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                  minHeight: '300px' // Ensure consistent chart height
                 }}
               >
                 <div className="h-full">

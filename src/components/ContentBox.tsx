@@ -21,7 +21,6 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
     weather: true,
     news: true,
     movie: true,
-    stock: true,
     crypto: true,
     maps: true,
     chatbot: true
@@ -261,18 +260,6 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
                     <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading Movie API{loadingDots}]</span>
                   ) : (
                     <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-11-20 features/movies → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>TMDB API</span></>
-                  )}
-                </p>
-              </div>
-              <div className="flex gap-4">
-                <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
-                  <TrendingUp size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Stock Prices
-                </p>
-                <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
-                  {loadingStates.stock ? (
-                    <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading Stock API{loadingDots}]</span>
-                  ) : (
-                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-11-15 features/stocks → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Alpha Vantage API</span></>
                   )}
                 </p>
               </div>
