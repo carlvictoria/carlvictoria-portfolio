@@ -5,6 +5,7 @@ import { User, Mail, Music, PawPrint, Building2, Sun, Moon, Keyboard,
 import { useState, useEffect } from 'react';
 import AboutModal from './AboutModal';
 import TypingTestModal from './TypingTestModal';
+// Import MusicPlayerModal
 import MusicPlayerModal from './MusicPlayerModal';
 
 export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?: (isDarkMode: boolean) => void; onClose?: () => void }) {
@@ -352,7 +353,6 @@ export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?:
         <MusicPlayerModal 
           isDarkMode={isDarkMode} 
           onClose={() => setShowMusicPlayer(false)}
-          minimizedIndex={(showAboutModal ? 1 : 0) + (showTypingTest ? 1 : 0)}
         />
       )}
     </>
