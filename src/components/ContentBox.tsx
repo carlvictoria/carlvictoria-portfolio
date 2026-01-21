@@ -5,11 +5,13 @@ import { User, Mail, Music, PawPrint, Building2, Sun, Moon, Keyboard,
 import { useState, useEffect } from 'react';
 import AboutModal from './AboutModal';
 import TypingTestModal from './TypingTestModal';
+import MusicPlayerModal from './MusicPlayerModal';
 
 export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?: (isDarkMode: boolean) => void; onClose?: () => void }) {
   const [isDarkMode, setIsDarkMode] = useState(true); // Moon is default (dark mode on)
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showTypingTest, setShowTypingTest] = useState(false);
+  const [showMusicPlayer, setShowMusicPlayer] = useState(false);
   
   const [loadingStates, setLoadingStates] = useState({
     music: true,
@@ -208,7 +210,11 @@ export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?:
             </p>
             <div className="ml-6 space-y-2">
               <div className="flex gap-4">
-                <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
+                <p 
+                  style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} 
+                  className="text-lg w-64 flex-shrink-0 flex items-center gap-2 cursor-pointer hover:opacity-80"
+                  onClick={() => setShowMusicPlayer(true)}
+                >
                   <Music size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Music Player
                 </p>
                 <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
@@ -339,6 +345,14 @@ export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?:
           isDarkMode={isDarkMode} 
           onClose={() => setShowTypingTest(false)}
           minimizedIndex={showAboutModal ? 1 : 0}
+        />
+      )}
+      
+      {showMusicPlayer && (
+        <MusicPlayerModal 
+          isDarkMode={isDarkMode} 
+          onClose={() => setShowMusicPlayer(false)}
+          minimizedIndex={(showAboutModal ? 1 : 0) + (showTypingTest ? 1 : 0)}
         />
       )}
     </>
