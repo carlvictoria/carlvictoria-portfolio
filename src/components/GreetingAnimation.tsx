@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import ContentBox from './ContentBox';
 import FloatingStars from './FloatingStars';
+import SoundWave from './SoundWave';
 import Image from 'next/image';
 import folderIcon from '@/assets/folder.png';
 
@@ -15,6 +16,7 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
   const [moveToTop, setMoveToTop] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(isDarkMode);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
   useEffect(() => {
     setCurrentTheme(isDarkMode);
@@ -86,6 +88,7 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
   return (
     <>
       <FloatingStars isDarkMode={currentTheme} />
+      <SoundWave isDarkMode={currentTheme} isPlaying={isMusicPlaying} />
       <div 
         className="transition-all duration-[1000ms] ease-in-out flex flex-col items-center"
         style={{
@@ -139,7 +142,7 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
           className="animate-fade-in transition-opacity duration-1000"
           style={{ opacity: isClosing ? 0 : 1 }}
         >
-          <ContentBox onThemeChange={setCurrentTheme} onClose={handleClose} />
+          <ContentBox onThemeChange={setCurrentTheme} onClose={handleClose} onMusicStateChange={setIsMusicPlaying} />
         </div>
       )}
       </div>

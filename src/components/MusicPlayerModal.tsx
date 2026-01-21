@@ -18,9 +18,10 @@ interface Track {
 interface MusicPlayerModalProps {
   onClose: () => void;
   isDarkMode: boolean;
+  onMusicStateChange?: (isPlaying: boolean) => void;
 }
 
-export default function MusicPlayerModal({ onClose, isDarkMode }: MusicPlayerModalProps) {
+export default function MusicPlayerModal({ onClose, isDarkMode, onMusicStateChange }: MusicPlayerModalProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Track[]>([]);
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
@@ -92,6 +93,27 @@ export default function MusicPlayerModal({ onClose, isDarkMode }: MusicPlayerMod
       audioRef.current.volume = isMuted ? 0 : volume;
     }
   }, [volume, isMuted]);
+
+  // Notify parent about music playing state
+  useEffect(() => {
+    if (onMusicStateChange) {
+      onMusicStateChange(isPlaying);
+    }
+  }, [isPlaying, onMusicStateChange]);
+
+  // Clean up when component unmounts or closes
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+      }
+      // Reset music playing state when modal closes
+      if (onMusicStateChange) {
+        onMusicStateChange(false);
+      }
+    };
+  }, [onMusicStateChange]);
 
   // Search for tracks using iTunes API
   const handleSearch = async () => {

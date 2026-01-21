@@ -8,7 +8,7 @@ import TypingTestModal from './TypingTestModal';
 // Import MusicPlayerModal
 import MusicPlayerModal from './MusicPlayerModal';
 
-export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?: (isDarkMode: boolean) => void; onClose?: () => void }) {
+export default function ContentBox({ onThemeChange, onClose, onMusicStateChange }: { onThemeChange?: (isDarkMode: boolean) => void; onClose?: () => void; onMusicStateChange?: (isPlaying: boolean) => void }) {
   const [isDarkMode, setIsDarkMode] = useState(true); // Moon is default (dark mode on)
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showTypingTest, setShowTypingTest] = useState(false);
@@ -353,6 +353,7 @@ export default function ContentBox({ onThemeChange, onClose }: { onThemeChange?:
         <MusicPlayerModal 
           isDarkMode={isDarkMode} 
           onClose={() => setShowMusicPlayer(false)}
+          onMusicStateChange={onMusicStateChange}
         />
       )}
     </>
