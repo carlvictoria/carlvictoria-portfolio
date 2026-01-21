@@ -14,22 +14,50 @@ build/
 .env.local
 .env.*.local
 
+# Database
+# MongoDB connection strings and sensitive data
+DATABASE_STATUS.md
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # IDEs
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Cache directories
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
 
 # Misc
-.parcel-cache/
 .pnp.*
+*.tgz
+*.tar.gz
+
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies

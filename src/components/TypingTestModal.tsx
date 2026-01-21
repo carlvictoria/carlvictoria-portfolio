@@ -9,6 +9,21 @@ interface TypingTestModalProps {
   minimizedIndex?: number;
 }
 
+interface TopScore {
+  _id: string;
+  name: string;
+  wpm: number;
+  accuracy: number;
+  score: number;
+  timestamp: string;
+}
+
+interface TypingTestModalProps {
+  isDarkMode: boolean;
+  onClose: () => void;
+  minimizedIndex?: number;
+}
+
 const sentences = [
   "The quick brown fox jumps over the lazy dog",
   "Practice makes perfect when you type every day",
@@ -39,30 +54,64 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
   const [wpm, setWpm] = useState(0);
   const [accuracy, setAccuracy] = useState(100);
   const [isComplete, setIsComplete] = useState(false);
+  const [playerName, setPlayerName] = useState('');
+  const [canStart, setCanStart] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitResult, setSubmitResult] = useState<string | null>(null);
+  const [topScores, setTopScores] = useState<TopScore[]>([]);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // Generate random sentence on mount
     const randomSentence = sentences[Math.floor(Math.random() * sentences.length)];
     setCurrentSentence(randomSentence);
-  }, []);
-
-  useEffect(() => {
-    // Auto-focus input
-    if (inputRef.current) {
-      inputRef.current.focus();
+    
+    // Load top scores
+    loadTopScores();
+    
+    // Focus on name input initially
+    if (nameInputRef.current) {
+      nameInputRef.current.focus();
     }
   }, []);
+
+  const loadTopScores = async () => {
+    try {
+      const response = await fetch('/api/typing-scores');
+      if (response.ok) {
+        const data = await response.json();
+        setTopScores(data.topScores || []);
+      }
+    } catch (error) {
+      console.error('Failed to load top scores:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Check if name is entered to enable the test
+    setCanStart(playerName.trim().length > 0);
+  }, [playerName]);
+
+  useEffect(() => {
+    // Auto-focus input when test can start
+    if (inputRef.current && canStart && !isComplete) {
+      inputRef.current.focus();
+    }
+  }, [canStart, isComplete]);
 
   useEffect(() => {
     // Check if test is complete
-    if (userInput.length === currentSentence.length && currentSentence.length > 0) {
+    if (userInput.length === currentSentence.length && currentSentence.length > 0 && canStart) {
       setIsComplete(true);
       calculateResults();
     }
-  }, [userInput, currentSentence]);
+  }, [userInput, currentSentence, canStart]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!canStart) return; // Prevent typing if name not entered
+    
     const value = e.target.value;
     
     // Start timer on first character
@@ -76,7 +125,7 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
     }
   };
 
-  const calculateResults = () => {
+  const calculateResults = async () => {
     if (startTime) {
       const timeElapsed = (Date.now() - startTime) / 1000 / 60; // in minutes
       const wordsTyped = currentSentence.split(' ').length;
@@ -92,6 +141,48 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
       }
       const calculatedAccuracy = Math.round((correct / currentSentence.length) * 100);
       setAccuracy(calculatedAccuracy);
+      
+      // Auto-submit score
+      await submitScore(calculatedWpm, calculatedAccuracy);
+    }
+  };
+
+  const submitScore = async (finalWpm: number, finalAccuracy: number) => {
+    if (!playerName.trim()) return;
+    
+    setIsSubmitting(true);
+    setSubmitResult(null);
+    
+    try {
+      const response = await fetch('/api/typing-scores', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: playerName.trim(),
+          wpm: finalWpm,
+          accuracy: finalAccuracy
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        if (data.madeLeaderboard) {
+          setSubmitResult(`🎉 Congratulations! You made it to the top 5 with a score of ${data.newScore.score}!`);
+        } else {
+          setSubmitResult(`Score submitted: ${data.newScore.score}. Need ${data.minimumScoreNeeded}+ to make top 5.`);
+        }
+        setTopScores(data.topScores || topScores);
+      } else {
+        setSubmitResult('Failed to submit score. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting score:', error);
+      setSubmitResult('Error submitting score. Please check your connection.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -103,7 +194,9 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
     setWpm(0);
     setAccuracy(100);
     setIsComplete(false);
-    if (inputRef.current) {
+    setIsSubmitting(false);
+    setSubmitResult(null);
+    if (canStart && inputRef.current) {
       inputRef.current.focus();
     }
   };
@@ -137,7 +230,7 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
       title="Typing Test"
       width="900px"
       minWidth="800px"
-      minHeight="400px"
+      minHeight="500px"
       showTypingAnimation={true}
       typingText="typing-test.exe"
       minimizedIndex={minimizedIndex}
@@ -153,6 +246,37 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
         >
           ~$ ./typing-test --mode=practice
         </p>
+
+        {/* Name Input */}
+        <div className="mb-6">
+          <p style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)', fontSize: '0.875rem', fontFamily: 'monospace', marginBottom: '8px' }}>
+            Enter your name to start:
+          </p>
+          <input
+            ref={nameInputRef}
+            type="text"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+            disabled={isComplete}
+            className="w-full max-w-md p-3 rounded-lg outline-none"
+            style={{
+              background: isDarkMode ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.6)',
+              border: `2px solid ${isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)'}`,
+              color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)',
+              fontFamily: 'monospace',
+              fontSize: '1rem'
+            }}
+            placeholder="Your name..."
+            autoComplete="off"
+            spellCheck="false"
+            maxLength={50}
+          />
+          {!canStart && (
+            <p style={{ color: 'rgba(255, 204, 0, 0.8)', fontSize: '0.75rem', fontFamily: 'monospace', marginTop: '4px' }}>
+              ⚠ Name required to start typing test
+            </p>
+          )}
+        </div>
 
         {/* Stats Display */}
         <div className="flex gap-8 mb-8">
@@ -170,6 +294,14 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
             </p>
             <p style={{ color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontSize: '1.5rem', fontWeight: 'bold', fontFamily: 'monospace' }}>
               {accuracy}%
+            </p>
+          </div>
+          <div>
+            <p style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontSize: '0.7rem', fontFamily: 'monospace' }}>
+              SCORE
+            </p>
+            <p style={{ color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontSize: '1.5rem', fontWeight: 'bold', fontFamily: 'monospace' }}>
+              {Math.round(wpm * (accuracy / 100))}
             </p>
           </div>
         </div>
@@ -208,22 +340,23 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
           type="text"
           value={userInput}
           onChange={handleInputChange}
-          disabled={isComplete}
+          disabled={isComplete || !canStart}
           className="w-full p-3 rounded-lg mb-6 outline-none"
           style={{
             background: isDarkMode ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.6)',
             border: `2px solid ${isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)'}`,
             color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)',
             fontFamily: 'monospace',
-            fontSize: '1rem'
+            fontSize: '1rem',
+            opacity: canStart ? 1 : 0.5
           }}
-          placeholder="Start typing..."
+          placeholder={canStart ? "Start typing..." : "Enter your name first..."}
           autoComplete="off"
           spellCheck="false"
         />
 
         {/* Controls */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 mb-4">
           <button
             onClick={resetTest}
             className="px-4 py-2 rounded transition-all"
@@ -237,18 +370,97 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
           >
             {isComplete ? '↻ Try Again' : '↻ Reset'}
           </button>
+          
+          <button
+            onClick={() => setShowLeaderboard(!showLeaderboard)}
+            className="px-4 py-2 rounded transition-all"
+            style={{
+              background: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(37, 99, 235, 0.1)',
+              border: `1px solid ${isDarkMode ? 'rgba(59, 130, 246, 0.3)' : 'rgba(37, 99, 235, 0.3)'}`,
+              color: isDarkMode ? 'rgba(59, 130, 246, 1)' : 'rgba(37, 99, 235, 1)',
+              fontFamily: 'monospace',
+              fontSize: '0.875rem'
+            }}
+          >
+            {showLeaderboard ? '✕ Hide Leaderboard' : '🏆 Top 5'}
+          </button>
         </div>
 
-        {isComplete && (
+        {/* Leaderboard */}
+        {showLeaderboard && (
           <div 
-            className="mt-6 p-4 rounded-lg animate-fade-in"
+            className="mb-4 p-4 rounded-lg"
+            style={{
+              background: isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(37, 99, 235, 0.1)',
+              border: `1px solid ${isDarkMode ? 'rgba(59, 130, 246, 0.3)' : 'rgba(37, 99, 235, 0.3)'}`,
+            }}
+          >
+            <h3 style={{ color: isDarkMode ? 'rgba(59, 130, 246, 1)' : 'rgba(37, 99, 235, 1)', fontFamily: 'monospace', fontSize: '1rem', marginBottom: '12px' }}>
+              🏆 Top 5 Leaderboard
+            </h3>
+            {topScores.length > 0 ? (
+              <div className="space-y-2">
+                {topScores.map((score, index) => (
+                  <div key={score._id} className="flex justify-between items-center">
+                    <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.875rem' }}>
+                      {index + 1}. {score.name}
+                    </span>
+                    <span style={{ color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'monospace', fontSize: '0.875rem' }}>
+                      {score.wpm} WPM • {score.accuracy}% • Score: {score.score}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p style={{ color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', fontFamily: 'monospace', fontSize: '0.875rem' }}>
+                No scores yet. Be the first!
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Submit Result */}
+        {isSubmitting && (
+          <div 
+            className="mb-4 p-3 rounded-lg"
+            style={{
+              background: isDarkMode ? 'rgba(255, 204, 0, 0.1)' : 'rgba(255, 204, 0, 0.1)',
+              border: `1px solid ${isDarkMode ? 'rgba(255, 204, 0, 0.3)' : 'rgba(255, 204, 0, 0.3)'}`,
+            }}
+          >
+            <p style={{ color: isDarkMode ? 'rgba(255, 204, 0, 1)' : 'rgba(255, 204, 0, 1)', fontFamily: 'monospace', fontSize: '0.875rem' }}>
+              ⏳ Submitting your score...
+            </p>
+          </div>
+        )}
+
+        {submitResult && (
+          <div 
+            className="mb-4 p-3 rounded-lg"
             style={{
               background: isDarkMode ? 'rgba(0, 255, 136, 0.1)' : 'rgba(0, 180, 90, 0.1)',
               border: `1px solid ${isDarkMode ? 'rgba(0, 255, 136, 0.3)' : 'rgba(0, 180, 90, 0.3)'}`,
             }}
           >
             <p style={{ color: isDarkMode ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 180, 90, 1)', fontFamily: 'monospace', fontSize: '0.875rem' }}>
-              ✓ Test completed! You typed {currentSentence.split(' ').length} words at {wpm} WPM with {accuracy}% accuracy.
+              {submitResult}
+            </p>
+          </div>
+        )}
+
+        {isComplete && (
+          <div 
+            className="p-4 rounded-lg animate-fade-in"
+            style={{
+              background: isDarkMode ? 'rgba(0, 255, 136, 0.1)' : 'rgba(0, 180, 90, 0.1)',
+              border: `1px solid ${isDarkMode ? 'rgba(0, 255, 136, 0.3)' : 'rgba(0, 180, 90, 0.3)'}`,
+            }}
+          >
+            <p style={{ color: isDarkMode ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 180, 90, 1)', fontFamily: 'monospace', fontSize: '0.875rem' }}>
+              ✓ Test completed! {playerName} typed {currentSentence.split(' ').length} words at {wpm} WPM with {accuracy}% accuracy.
+            </p>
+            <p style={{ color: isDarkMode ? 'rgba(0, 255, 136, 1)' : 'rgba(0, 180, 90, 1)', fontFamily: 'monospace', fontSize: '0.875rem', marginTop: '4px' }}>
+              Your score: {Math.round(wpm * (accuracy / 100))} points
             </p>
           </div>
         )}
