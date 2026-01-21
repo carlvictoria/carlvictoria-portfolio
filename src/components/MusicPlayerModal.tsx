@@ -198,7 +198,8 @@ export default function MusicPlayerModal({ onClose, isDarkMode }: MusicPlayerMod
         className="flex gap-4 relative overflow-hidden"
         style={{
           width: '100%',
-          height: '350px',
+          maxWidth: '100%',
+          height: '500px',
           fontFamily: 'var(--font-terminal)',
         }}
       >
@@ -229,7 +230,7 @@ export default function MusicPlayerModal({ onClose, isDarkMode }: MusicPlayerMod
         </div>
 
         {/* Main Player Card */}
-        <div className="w-80 flex items-center justify-center relative z-10">
+        <div className="w-80 flex-shrink-0 flex items-center justify-center relative z-10">
           <div 
             className="w-full h-full rounded-2xl backdrop-blur-2xl p-4 shadow-2xl flex flex-col"
             style={{
@@ -428,7 +429,7 @@ export default function MusicPlayerModal({ onClose, isDarkMode }: MusicPlayerMod
 
         {/* Search and Results Panel - Bento Box Style */}
         <div 
-          className="flex-1 flex flex-col gap-3 relative z-10 h-full"
+          className="flex flex-col gap-3 relative z-10 h-full flex-1 min-w-0"
         >
           {/* Search Bar */}
           <div className="flex-shrink-0">
@@ -452,10 +453,11 @@ export default function MusicPlayerModal({ onClose, isDarkMode }: MusicPlayerMod
                     handleSearch();
                   }
                 }}
-                className="flex-1 bg-transparent outline-none placeholder-opacity-50"
+                className="flex-1 bg-transparent outline-none placeholder-opacity-50 min-w-0"
                 style={{
                   color: isDarkMode ? '#fff' : '#000',
                   fontFamily: 'var(--font-terminal)',
+                  maxWidth: '100%',
                 }}
               />
               {isLoading && (
@@ -472,7 +474,7 @@ export default function MusicPlayerModal({ onClose, isDarkMode }: MusicPlayerMod
 
           {/* Search Results */}
           <div 
-            className="flex-1 rounded-xl backdrop-blur-xl overflow-hidden shadow-lg"
+            className="flex-1 rounded-xl backdrop-blur-xl overflow-hidden shadow-lg min-h-0"
             style={{
               backgroundColor: isDarkMode 
                 ? 'rgba(20, 25, 35, 0.85)' 
@@ -537,7 +539,7 @@ export default function MusicPlayerModal({ onClose, isDarkMode }: MusicPlayerMod
                       </p>
                     </div>
                     <span 
-                      className="text-xs opacity-40 flex-shrink-0"
+                      className="text-xs opacity-40 flex-shrink-0 ml-1"
                       style={{
                         color: isDarkMode ? '#fff' : '#000',
                         fontFamily: 'var(--font-terminal)',
