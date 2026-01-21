@@ -7,12 +7,14 @@ import AboutModal from './AboutModal';
 import TypingTestModal from './TypingTestModal';
 // Import MusicPlayerModal
 import MusicPlayerModal from './MusicPlayerModal';
+import CryptoModal from './CryptoModal';
 
 export default function ContentBox({ onThemeChange, onClose, onMusicStateChange }: { onThemeChange?: (isDarkMode: boolean) => void; onClose?: () => void; onMusicStateChange?: (isPlaying: boolean) => void }) {
   const [isDarkMode, setIsDarkMode] = useState(true); // Moon is default (dark mode on)
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showTypingTest, setShowTypingTest] = useState(false);
   const [showMusicPlayer, setShowMusicPlayer] = useState(false);
+  const [showCrypto, setShowCrypto] = useState(false);
   
   const [loadingStates, setLoadingStates] = useState({
     music: true,
@@ -20,6 +22,7 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
     news: true,
     movie: true,
     stock: true,
+    crypto: true,
     maps: true,
     chatbot: true
   });
@@ -49,8 +52,7 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
       setTimeout(() => setLoadingStates(prev => ({ ...prev, weather: false })), 3000),
       setTimeout(() => setLoadingStates(prev => ({ ...prev, news: false })), 2800),
       setTimeout(() => setLoadingStates(prev => ({ ...prev, movie: false })), 3200),
-      setTimeout(() => setLoadingStates(prev => ({ ...prev, stock: false })), 2600),
-      setTimeout(() => setLoadingStates(prev => ({ ...prev, maps: false })), 2900),
+      setTimeout(() => setLoadingStates(prev => ({ ...prev, stock: false })), 2600),      setTimeout(() => setLoadingStates(prev => ({ ...prev, crypto: false })), 2900),      setTimeout(() => setLoadingStates(prev => ({ ...prev, maps: false })), 2900),
       setTimeout(() => setLoadingStates(prev => ({ ...prev, chatbot: false })), 3100),
     ];
 
@@ -275,6 +277,22 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
                 </p>
               </div>
               <div className="flex gap-4">
+                <p 
+                  style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} 
+                  className="text-lg w-64 flex-shrink-0 flex items-center gap-2 cursor-pointer hover:opacity-80"
+                  onClick={() => setShowCrypto(true)}
+                >
+                  <DollarSign size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Crypto Tracker
+                </p>
+                <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
+                  {loadingStates.crypto ? (
+                    <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading Crypto API{loadingDots}]</span>
+                  ) : (
+                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-01-21 features/crypto → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>CoinGecko API</span></>
+                  )}
+                </p>
+              </div>
+              <div className="flex gap-4">
                 <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
                   <Map size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Maps
                 </p>
@@ -354,6 +372,14 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
           isDarkMode={isDarkMode} 
           onClose={() => setShowMusicPlayer(false)}
           onMusicStateChange={onMusicStateChange}
+        />
+      )}
+      
+      {showCrypto && (
+        <CryptoModal 
+          isDarkMode={isDarkMode} 
+          onClose={() => setShowCrypto(false)}
+          minimizedIndex={(showAboutModal ? 1 : 0) + (showTypingTest ? 1 : 0) + (showMusicPlayer ? 1 : 0)}
         />
       )}
     </>
