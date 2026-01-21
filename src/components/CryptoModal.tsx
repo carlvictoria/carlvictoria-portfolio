@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Modal from './Modal';
-import { Search, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
+import { Search, TrendingUp, TrendingDown, DollarSign, BarChart3, Activity } from 'lucide-react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -39,6 +39,19 @@ interface CryptoData {
   name: string;
   current_price: number;
   price_change_percentage_24h: number;
+  price_change_24h: number;
+  market_cap: number;
+  market_cap_rank: number;
+  total_volume: number;
+  circulating_supply: number;
+  total_supply: number;
+  max_supply: number;
+  ath: number;
+  ath_change_percentage: number;
+  ath_date: string;
+  atl: number;
+  atl_change_percentage: number;
+  atl_date: string;
   sparkline_in_7d: {
     price: number[];
   };
@@ -120,6 +133,19 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
         name: coinData.name,
         current_price: coinData.market_data?.current_price?.usd || 0,
         price_change_percentage_24h: coinData.market_data?.price_change_percentage_24h || 0,
+        price_change_24h: coinData.market_data?.price_change_24h?.usd || 0,
+        market_cap: coinData.market_data?.market_cap?.usd || 0,
+        market_cap_rank: coinData.market_cap_rank || 0,
+        total_volume: coinData.market_data?.total_volume?.usd || 0,
+        circulating_supply: coinData.market_data?.circulating_supply || 0,
+        total_supply: coinData.market_data?.total_supply || 0,
+        max_supply: coinData.market_data?.max_supply || 0,
+        ath: coinData.market_data?.ath?.usd || 0,
+        ath_change_percentage: coinData.market_data?.ath_change_percentage?.usd || 0,
+        ath_date: coinData.market_data?.ath_date?.usd || '',
+        atl: coinData.market_data?.atl?.usd || 0,
+        atl_change_percentage: coinData.market_data?.atl_change_percentage?.usd || 0,
+        atl_date: coinData.market_data?.atl_date?.usd || '',
         sparkline_in_7d: {
           price: coinData.market_data?.sparkline_7d?.price || []
         }
@@ -213,18 +239,32 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
     searchCrypto();
   };
 
-  const formatPrice = (price: number) => {
-    if (price === 0) return '$0.00';
+  const formatNumber = (num: number, isPrice: boolean = false) => {
+    if (num === 0) return isPrice ? '$0.00' : '0';
     
-    if (price < 0.01) {
-      return `$${price.toFixed(8)}`;
-    } else if (price < 1) {
-      return `$${price.toFixed(4)}`;
-    } else if (price < 100) {
-      return `$${price.toFixed(2)}`;
-    } else {
-      return `$${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (isPrice) {
+      if (num < 0.000001) return `$${num.toExponential(2)}`;
+      if (num < 0.01) return `$${num.toFixed(8)}`;
+      if (num < 1) return `$${num.toFixed(6)}`;
+      if (num < 100) return `$${num.toFixed(4)}`;
+      return `$${num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
+    
+    // For other numbers (market cap, volume, etc.)
+    if (num >= 1e12) return `$${(num / 1e12).toFixed(2)}T`;
+    if (num >= 1e9) return `$${(num / 1e9).toFixed(2)}B`;
+    if (num >= 1e6) return `$${(num / 1e6).toFixed(2)}M`;
+    if (num >= 1e3) return `$${(num / 1e3).toFixed(2)}K`;
+    return `$${num.toFixed(2)}`;
+  };
+
+  const formatSupply = (num: number) => {
+    if (num === 0 || num === null) return 'N/A';
+    if (num >= 1e12) return `${(num / 1e12).toFixed(2)}T`;
+    if (num >= 1e9) return `${(num / 1e9).toFixed(2)}B`;
+    if (num >= 1e6) return `${(num / 1e6).toFixed(2)}M`;
+    if (num >= 1e3) return `${(num / 1e3).toFixed(2)}K`;
+    return num.toLocaleString();
   };
 
   const formatPercentage = (percentage: number) => {
@@ -232,11 +272,13 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
     return `${sign}${percentage.toFixed(2)}%`;
   };
 
-  // Prepare chart data
+  // Prepare chart data with enhanced styling
   const chartData = cryptoData?.sparkline_in_7d?.price ? {
     labels: cryptoData.sparkline_in_7d.price.map((_, index) => {
-      const hoursAgo = cryptoData.sparkline_in_7d.price.length - 1 - index;
-      return `${hoursAgo}h ago`;
+      const now = new Date();
+      const hoursAgo = (cryptoData.sparkline_in_7d.price.length - 1 - index) * (7 * 24 / cryptoData.sparkline_in_7d.price.length);
+      const date = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }),
     datasets: [
       {
@@ -248,14 +290,16 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
         backgroundColor: cryptoData.price_change_percentage_24h >= 0
           ? (isDarkMode ? 'rgba(34, 197, 94, 0.1)' : 'rgba(22, 163, 74, 0.1)')
           : (isDarkMode ? 'rgba(239, 68, 68, 0.1)' : 'rgba(220, 38, 38, 0.1)'),
-        borderWidth: 2,
+        borderWidth: 3,
         fill: true,
         tension: 0.4,
         pointRadius: 0,
-        pointHoverRadius: 6,
+        pointHoverRadius: 8,
         pointHoverBackgroundColor: cryptoData.price_change_percentage_24h >= 0
           ? (isDarkMode ? 'rgba(34, 197, 94, 1)' : 'rgba(22, 163, 74, 1)')
           : (isDarkMode ? 'rgba(239, 68, 68, 1)' : 'rgba(220, 38, 38, 1)'),
+        pointHoverBorderColor: isDarkMode ? '#fff' : '#000',
+        pointHoverBorderWidth: 2,
       },
     ],
   } : null;
@@ -268,29 +312,55 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
         display: false,
       },
       tooltip: {
-        backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
-        titleColor: isDarkMode ? '#fff' : '#000',
-        bodyColor: isDarkMode ? '#fff' : '#000',
+        backgroundColor: isDarkMode ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.95)',
+        titleColor: isDarkMode ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)',
+        bodyColor: isDarkMode ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
         borderColor: isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
         borderWidth: 1,
+        cornerRadius: 8,
+        displayColors: false,
         mode: 'index' as const,
         intersect: false,
         callbacks: {
-          label: (context: any) => `$${context.parsed.y.toFixed(cryptoData?.current_price && cryptoData.current_price < 1 ? 4 : 2)}`,
+          title: function(context: any) {
+            return context[0].label || '';
+          },
+          label: function(context: any) {
+            return `Price: ${formatNumber(context.parsed.y, true)}`;
+          },
         },
       },
     },
     scales: {
       x: {
-        display: false,
+        display: true,
         grid: {
           display: false,
         },
+        ticks: {
+          color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
+          font: {
+            size: 12,
+          },
+          maxTicksLimit: 7,
+        },
       },
       y: {
-        display: false,
+        display: true,
+        position: 'right' as const,
         grid: {
-          display: false,
+          color: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+          drawBorder: false,
+        },
+        ticks: {
+          color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
+          font: {
+            size: 12,
+          },
+          callback: function(value: any) {
+            return formatNumber(value as number, true);
+          },
+          maxTicksLimit: 5,
         },
       },
     },
@@ -485,7 +555,7 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
                   </h2>
                   <div className="flex items-center gap-4">
                     <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '1.25rem', fontWeight: 'bold' }}>
-                      {formatPrice(cryptoData.current_price)}
+                      {formatNumber(cryptoData.current_price, true)}
                     </span>
                     <div className="flex items-center gap-1">
                       {cryptoData.price_change_percentage_24h >= 0 ? (
@@ -510,38 +580,155 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
                 </div>
               </div>
 
-              {/* Chart */}
-              <div 
-                className="flex-1 p-4 rounded-lg"
-                style={{
-                  background: isDarkMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)',
-                  border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
-                  minHeight: '300px' // Ensure consistent chart height
-                }}
-              >
-                <div className="h-full">
-                  {chartData ? (
-                    <Line data={chartData} options={chartOptions} />
-                  ) : (
-                    <div className="flex items-center justify-center h-full">
-                      <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', opacity: 0.6 }}>
-                        No chart data available
-                      </p>
-                    </div>
-                  )}
-                </div>
-                
-                <p 
-                  style={{ 
-                    color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', 
-                    fontFamily: 'monospace', 
-                    fontSize: '0.75rem', 
-                    textAlign: 'center',
-                    marginTop: '8px'
+              {/* Chart and Market Data */}
+              <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-4" style={{ minHeight: '350px', maxHeight: '400px' }}>
+                {/* Chart Section */}
+                <div 
+                  className="lg:col-span-2 p-4 rounded-lg flex flex-col"
+                  style={{
+                    background: isDarkMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)',
+                    border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
                   }}
                 >
-                  7-day price trend • Data from CoinGecko
-                </p>
+                  <div style={{ height: '280px', width: '100%' }}>
+                    {chartData ? (
+                      <Line data={chartData} options={chartOptions} />
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', opacity: 0.6 }}>
+                          No chart data available
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <p 
+                    style={{ 
+                      color: isDarkMode ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)', 
+                      fontFamily: 'monospace', 
+                      fontSize: '0.75rem', 
+                      textAlign: 'center',
+                      marginTop: '8px'
+                    }}
+                  >
+                    7-day price trend • Data from CoinGecko
+                  </p>
+                </div>
+
+                {/* Market Data Cards */}
+                <div className="space-y-3">
+                  {/* Market Cap Card */}
+                  <div 
+                    className="p-4 rounded-lg"
+                    style={{
+                      background: isDarkMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)',
+                      border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                    }}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <TrendingUp size={16} style={{ color: isDarkMode ? 'rgba(34, 197, 94, 1)' : 'rgba(22, 163, 74, 1)' }} />
+                      <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.75rem', opacity: 0.8 }}>
+                        MARKET CAP
+                      </span>
+                    </div>
+                    <div style={{ color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'monospace', fontSize: '1rem', fontWeight: 'bold' }}>
+                      {cryptoData.market_cap ? formatNumber(cryptoData.market_cap) : 'N/A'}
+                    </div>
+                  </div>
+
+                  {/* Trading Volume Card */}
+                  <div 
+                    className="p-4 rounded-lg"
+                    style={{
+                      background: isDarkMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)',
+                      border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                    }}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <BarChart3 size={16} style={{ color: isDarkMode ? 'rgba(59, 130, 246, 1)' : 'rgba(37, 99, 235, 1)' }} />
+                      <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.75rem', opacity: 0.8 }}>
+                        24H VOLUME
+                      </span>
+                    </div>
+                    <div style={{ color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'monospace', fontSize: '1rem', fontWeight: 'bold' }}>
+                      {cryptoData.total_volume ? formatNumber(cryptoData.total_volume) : 'N/A'}
+                    </div>
+                  </div>
+
+                  {/* Supply Information Card */}
+                  <div 
+                    className="p-4 rounded-lg"
+                    style={{
+                      background: isDarkMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)',
+                      border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                    }}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <DollarSign size={16} style={{ color: isDarkMode ? 'rgba(168, 85, 247, 1)' : 'rgba(147, 51, 234, 1)' }} />
+                      <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.75rem', opacity: 0.8 }}>
+                        SUPPLY
+                      </span>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between">
+                        <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.75rem', opacity: 0.7 }}>
+                          Circulating:
+                        </span>
+                        <span style={{ color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'monospace', fontSize: '0.75rem', fontWeight: 'bold' }}>
+                          {cryptoData.circulating_supply ? formatSupply(cryptoData.circulating_supply) : 'N/A'}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.75rem', opacity: 0.7 }}>
+                          Max:
+                        </span>
+                        <span style={{ color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'monospace', fontSize: '0.75rem', fontWeight: 'bold' }}>
+                          {cryptoData.max_supply ? formatSupply(cryptoData.max_supply) : '∞'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ATH/ATL Card */}
+                  <div 
+                    className="p-4 rounded-lg"
+                    style={{
+                      background: isDarkMode ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.3)',
+                      border: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                    }}
+                  >
+                    <div className="flex items-center gap-2 mb-2">
+                      <Activity size={16} style={{ color: isDarkMode ? 'rgba(251, 191, 36, 1)' : 'rgba(245, 158, 11, 1)' }} />
+                      <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.75rem', opacity: 0.8 }}>
+                        ALL-TIME
+                      </span>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="flex justify-between">
+                        <span style={{ color: isDarkMode ? 'rgba(34, 197, 94, 1)' : 'rgba(22, 163, 74, 1)', fontFamily: 'monospace', fontSize: '0.75rem', opacity: 0.8 }}>
+                          ATH:
+                        </span>
+                        <span style={{ color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'monospace', fontSize: '0.75rem', fontWeight: 'bold' }}>
+                          {cryptoData.ath ? formatNumber(cryptoData.ath, true) : 'N/A'}
+                        </span>
+                      </div>
+                      {cryptoData.ath_change_percentage && (
+                        <div className="flex justify-between">
+                          <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.65rem', opacity: 0.6 }}>
+                            From ATH:
+                          </span>
+                          <span style={{ 
+                            color: isDarkMode ? 'rgba(239, 68, 68, 1)' : 'rgba(220, 38, 38, 1)', 
+                            fontFamily: 'monospace', 
+                            fontSize: '0.65rem'
+                          }}>
+                            {formatPercentage(cryptoData.ath_change_percentage)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
