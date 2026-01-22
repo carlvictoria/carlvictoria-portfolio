@@ -9,6 +9,7 @@ import TypingTestModal from './TypingTestModal';
 import MusicPlayerModal from './MusicPlayerModal';
 import CryptoModal from './CryptoModal';
 import WeatherModal from './WeatherModal';
+import NewsModal from './NewsModal';
 
 export default function ContentBox({ onThemeChange, onClose, onMusicStateChange }: { onThemeChange?: (isDarkMode: boolean) => void; onClose?: () => void; onMusicStateChange?: (isPlaying: boolean) => void }) {
   const [isDarkMode, setIsDarkMode] = useState(true); // Moon is default (dark mode on)
@@ -17,6 +18,7 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
   const [showMusicPlayer, setShowMusicPlayer] = useState(false);
   const [showCrypto, setShowCrypto] = useState(false);
   const [showWeatherModal, setShowWeatherModal] = useState(false);
+  const [showNewsModal, setShowNewsModal] = useState(false);
   
   const [loadingStates, setLoadingStates] = useState({
     music: true,
@@ -241,7 +243,7 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
                   )}
                 </p>
               </div>
-              <div className="flex gap-4">
+              <div className="flex gap-4 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => setShowNewsModal(true)}>
                 <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
                   <Newspaper size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /News
                 </p>
@@ -377,6 +379,14 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
           onClose={() => setShowWeatherModal(false)}
           isDarkMode={isDarkMode}
           showTypingAnimation={true}
+        />
+      )}
+      
+      {showNewsModal && (
+        <NewsModal 
+          isDarkMode={isDarkMode} 
+          onClose={() => setShowNewsModal(false)}
+          minimizedIndex={(showAboutModal ? 1 : 0) + (showTypingTest ? 1 : 0) + (showMusicPlayer ? 1 : 0) + (showCrypto ? 1 : 0) + (showWeatherModal ? 1 : 0)}
         />
       )}
     </>

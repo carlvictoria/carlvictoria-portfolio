@@ -66,3 +66,12 @@ body {
     filter: blur(30px) hue-rotate(10deg);
   }
 }
+
+/* Hide scrollbars */
+.scrollbar-hide {
+  -webkit-overflow-scrolling: touch;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
