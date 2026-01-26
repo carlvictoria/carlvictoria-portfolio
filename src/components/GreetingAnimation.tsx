@@ -4,41 +4,19 @@ import { useState, useEffect } from 'react';
 import ContentBox from './ContentBox';
 import FloatingStars from './FloatingStars';
 import SoundWave from './SoundWave';
-import Image from 'next/image';
-import folderIcon from '@/assets/folder.png';
 
 export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean }) {
   const [displayText, setDisplayText] = useState('');
   const [showFinal, setShowFinal] = useState(false);
   const [typedText, setTypedText] = useState('');
-  const [showFolder, setShowFolder] = useState(false);
   const [moveToLeft, setMoveToLeft] = useState(false);
   const [moveToTop, setMoveToTop] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(isDarkMode);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
 
   useEffect(() => {
     setCurrentTheme(isDarkMode);
   }, [isDarkMode]);
-
-  const handleFolderClick = () => {
-    setShowFolder(false);
-    setMoveToLeft(true);
-    setTimeout(() => setMoveToTop(true), 1000);
-  };
-
-  const handleClose = () => {
-    setIsClosing(true);
-    setMoveToLeft(false);
-    setTimeout(() => {
-      setMoveToTop(false);
-      setTimeout(() => {
-        setIsClosing(false);
-        setShowFolder(true);
-      }, 100);
-    }, 1600);
-  };
 
   useEffect(() => {
     const greetings = [
@@ -73,7 +51,8 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
               } else {
                 clearInterval(typingInterval);
                 setTimeout(() => {
-                  setShowFolder(true);
+                  setMoveToLeft(true);
+                  setTimeout(() => setMoveToTop(true), 1000);
                 }, 100);
               }
             }, 100);
@@ -110,39 +89,9 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
         {showFinal && typedText === 'C:\\Users\\CarlVictoria>' && <span className="blinking-cursor" style={{ color: currentTheme ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease' }}>_</span>}
       </h1>
       
-      {showFolder && !moveToTop && (
-        <div className="flex flex-col items-center animate-fade-in">
-          <div 
-            className="mt-8 cursor-pointer transition-all duration-300 hover:scale-110"
-            onClick={handleFolderClick}
-          >
-            <Image 
-              src={folderIcon} 
-              alt="Open Portfolio" 
-              width={120} 
-              height={120}
-              className="drop-shadow-2xl"
-            />
-          </div>
-          <p 
-            className="mt-3 text-sm animate-pulse"
-            style={{
-              color: currentTheme ? 'var(--cmd-title)' : 'var(--cmd-title-l)',
-              fontFamily: 'var(--font-terminal)',
-              opacity: 0.7
-            }}
-          >
-            ↑ Click to open ↑
-          </p>
-        </div>
-      )}
-      
       {showFinal && typedText === 'C:\\Users\\CarlVictoria>' && moveToTop && (
-        <div 
-          className="animate-fade-in transition-opacity duration-1000"
-          style={{ opacity: isClosing ? 0 : 1 }}
-        >
-          <ContentBox onThemeChange={setCurrentTheme} onClose={handleClose} onMusicStateChange={setIsMusicPlaying} />
+        <div className="animate-fade-in transition-opacity duration-1000">
+          <ContentBox onThemeChange={setCurrentTheme} onMusicStateChange={setIsMusicPlaying} />
         </div>
       )}
       </div>

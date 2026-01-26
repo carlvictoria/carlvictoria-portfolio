@@ -126,13 +126,6 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
         }} className="text-center flex-1">
           CMD
         </p>
-        
-        {/* Close Button on Right */}
-        <div 
-          className="w-3 h-3 rounded-full bg-red-500 cursor-pointer hover:bg-red-600 transition-colors"
-          onClick={onClose}
-          style={{ boxShadow: '0 0 4px rgba(239, 68, 68, 0.6)' }}
-        />
       </div>
       <div className="p-8 break-words"> 
         <p style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-3xl font-bold mb-6 ml-10">
