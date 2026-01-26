@@ -93,6 +93,17 @@ const NewsModal: React.FC<NewsModalProps> = ({ isDarkMode, onClose, minimizedInd
       minimizedIndex={minimizedIndex}
     >
       <div className="flex flex-col h-full overflow-hidden">
+        <p 
+          style={{ 
+            color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', 
+            fontSize: '0.75rem', 
+            fontFamily: 'monospace' 
+          }} 
+          className="mb-6"
+        >
+          ~$ ./news-reader --source=gnews --format=headlines
+        </p>
+        
         {/* Content Area */}
         <div 
           className="flex-1 space-y-4 scrollbar-hide" 
