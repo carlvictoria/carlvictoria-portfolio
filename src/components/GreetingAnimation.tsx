@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import ContentBox from './ContentBox';
 import FloatingStars from './FloatingStars';
 import SoundWave from './SoundWave';
+import Footer from './Footer';
 
 export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean }) {
   const [displayText, setDisplayText] = useState('');
@@ -13,6 +14,7 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
   const [moveToTop, setMoveToTop] = useState(false);
   const [currentTheme, setCurrentTheme] = useState(isDarkMode);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [showFooter, setShowFooter] = useState(false);
 
   useEffect(() => {
     setCurrentTheme(isDarkMode);
@@ -52,7 +54,11 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
                 clearInterval(typingInterval);
                 setTimeout(() => {
                   setMoveToLeft(true);
-                  setTimeout(() => setMoveToTop(true), 1000);
+                  setTimeout(() => {
+                    setMoveToTop(true);
+                    // Show footer after content appears
+                    setTimeout(() => setShowFooter(true), 1500);
+                  }, 1000);
                 }, 100);
               }
             }, 100);
@@ -65,11 +71,11 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <FloatingStars isDarkMode={currentTheme} />
       <SoundWave isDarkMode={currentTheme} isPlaying={isMusicPlaying} />
       <div 
-        className="transition-all duration-[1000ms] ease-in-out flex flex-col items-center"
+        className="transition-all duration-[1000ms] ease-in-out flex flex-col items-center flex-1"
         style={{
           transform: moveToTop ? 'translateY(4rem)' : 'translateY(50vh)',
           position: 'relative',
@@ -95,6 +101,9 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
         </div>
       )}
       </div>
-    </>
+      
+      {/* Footer - only visible after animation completes */}
+      <Footer isDarkMode={currentTheme} visible={showFooter} />
+    </div>
   );
 }

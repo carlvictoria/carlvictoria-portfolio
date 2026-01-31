@@ -60,13 +60,15 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
   const [submitResult, setSubmitResult] = useState<string | null>(null);
   const [topScores, setTopScores] = useState<TopScore[]>([]);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [isLoadingScores, setIsLoadingScores] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Generate random sentence on mount
-    const randomSentence = sentences[Math.floor(Math.random() * sentences.length)];
-    setCurrentSentence(randomSentence);
+    // Generate 2 random sentences on mount
+    const shuffled = [...sentences].sort(() => Math.random() - 0.5);
+    const selectedSentences = shuffled.slice(0, 2);
+    setCurrentSentence(selectedSentences.join(' '));
     
     // Load top scores
     loadTopScores();
@@ -78,14 +80,24 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
   }, []);
 
   const loadTopScores = async () => {
+    setIsLoadingScores(true);
     try {
       const response = await fetch('/api/typing-scores');
-      if (response.ok) {
-        const data = await response.json();
-        setTopScores(data.topScores || []);
+      const data = await response.json();
+      
+      if (data.success && Array.isArray(data.topScores)) {
+        setTopScores(data.topScores);
+      } else if (Array.isArray(data.topScores)) {
+        setTopScores(data.topScores);
+      } else {
+        console.warn('Unexpected API response format:', data);
+        setTopScores([]);
       }
     } catch (error) {
       console.error('Failed to load top scores:', error);
+      setTopScores([]);
+    } finally {
+      setIsLoadingScores(false);
     }
   };
 
@@ -174,7 +186,13 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
         } else {
           setSubmitResult(`Score submitted: ${data.newScore.score}. Need ${data.minimumScoreNeeded}+ to make top 5.`);
         }
-        setTopScores(data.topScores || topScores);
+        // Always update scores if available
+        if (Array.isArray(data.topScores)) {
+          setTopScores(data.topScores);
+        } else {
+          // Fallback: refresh scores from API
+          await loadTopScores();
+        }
       } else {
         setSubmitResult('Failed to submit score. Please try again.');
       }
@@ -187,8 +205,10 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
   };
 
   const resetTest = () => {
-    const randomSentence = sentences[Math.floor(Math.random() * sentences.length)];
-    setCurrentSentence(randomSentence);
+    // Generate 2 random sentences
+    const shuffled = [...sentences].sort(() => Math.random() - 0.5);
+    const selectedSentences = shuffled.slice(0, 2);
+    setCurrentSentence(selectedSentences.join(' '));
     setUserInput('');
     setStartTime(null);
     setWpm(0);
@@ -395,10 +415,29 @@ export default function TypingTestModal({ isDarkMode, onClose, minimizedIndex = 
               border: `1px solid ${isDarkMode ? 'rgba(59, 130, 246, 0.3)' : 'rgba(37, 99, 235, 0.3)'}`,
             }}
           >
-            <h3 style={{ color: isDarkMode ? 'rgba(59, 130, 246, 1)' : 'rgba(37, 99, 235, 1)', fontFamily: 'monospace', fontSize: '1rem', marginBottom: '12px' }}>
-              🏆 Top 5 Leaderboard
-            </h3>
-            {topScores.length > 0 ? (
+            <div className="flex justify-between items-center mb-3">
+              <h3 style={{ color: isDarkMode ? 'rgba(59, 130, 246, 1)' : 'rgba(37, 99, 235, 1)', fontFamily: 'monospace', fontSize: '1rem' }}>
+                🏆 Top 5 Leaderboard
+              </h3>
+              <button
+                onClick={loadTopScores}
+                disabled={isLoadingScores}
+                className="px-2 py-1 rounded transition-all text-xs hover:opacity-80"
+                style={{
+                  background: isDarkMode ? 'rgba(59, 130, 246, 0.2)' : 'rgba(37, 99, 235, 0.2)',
+                  border: `1px solid ${isDarkMode ? 'rgba(59, 130, 246, 0.4)' : 'rgba(37, 99, 235, 0.4)'}`,
+                  color: isDarkMode ? 'rgba(59, 130, 246, 1)' : 'rgba(37, 99, 235, 1)',
+                  fontFamily: 'monospace'
+                }}
+              >
+                {isLoadingScores ? '...' : '↻ Refresh'}
+              </button>
+            </div>
+            {isLoadingScores ? (
+              <div className="flex justify-center py-4">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2" style={{ borderColor: isDarkMode ? 'rgba(59, 130, 246, 1)' : 'rgba(37, 99, 235, 1)' }}></div>
+              </div>
+            ) : topScores.length > 0 ? (
               <div className="space-y-2">
                 {topScores.map((score, index) => (
                   <div key={score._id} className="flex justify-between items-center">

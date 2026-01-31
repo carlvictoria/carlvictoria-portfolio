@@ -1,15 +1,20 @@
 'use client';
 
 import { User, Mail, Music, PawPrint, Building2, Sun, Moon, Keyboard, 
-        Cloud, Pencil, DollarSign, Newspaper, Film, TrendingUp, Map, MessageCircle } from 'lucide-react';
+        Cloud, Pencil, DollarSign, Newspaper, Film, TrendingUp, Map, MessageCircle, FolderOpen } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import AboutModal from './AboutModal';
 import TypingTestModal from './TypingTestModal';
-// Import MusicPlayerModal
 import MusicPlayerModal from './MusicPlayerModal';
 import CryptoModal from './CryptoModal';
 import WeatherModal from './WeatherModal';
 import NewsModal from './NewsModal';
+import MapsModal from './MapsModal';
+import ChatbotModal from './ChatbotModal';
+import DrawingModal from './DrawingModal';
+import ProjectContentBox from './ProjectContentBox';
+import ProjectsShowcaseModal from './ProjectsShowcaseModal';
+import ContactModal from './ContactModal';
 
 export default function ContentBox({ onThemeChange, onClose, onMusicStateChange }: { onThemeChange?: (isDarkMode: boolean) => void; onClose?: () => void; onMusicStateChange?: (isPlaying: boolean) => void }) {
   const [isDarkMode, setIsDarkMode] = useState(true); // Moon is default (dark mode on)
@@ -19,6 +24,16 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
   const [showCrypto, setShowCrypto] = useState(false);
   const [showWeatherModal, setShowWeatherModal] = useState(false);
   const [showNewsModal, setShowNewsModal] = useState(false);
+  const [showMapsModal, setShowMapsModal] = useState(false);
+  const [showChatbotModal, setShowChatbotModal] = useState(false);
+  const [showDrawingModal, setShowDrawingModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  
+  // Project content boxes state
+  const [showMapsProject, setShowMapsProject] = useState(false);
+  const [showChatbotProject, setShowChatbotProject] = useState(false);
+  const [showDrawingProject, setShowDrawingProject] = useState(false);
+  const [showProjectsShowcase, setShowProjectsShowcase] = useState(false);
   
   const [loadingStates, setLoadingStates] = useState({
     music: true,
@@ -27,7 +42,8 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
     movie: true,
     crypto: true,
     maps: true,
-    chatbot: true
+    chatbot: true,
+    drawing: true
   });
 
   const [loadingDots, setLoadingDots] = useState('');
@@ -55,8 +71,11 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
       setTimeout(() => setLoadingStates(prev => ({ ...prev, weather: false })), 3000),
       setTimeout(() => setLoadingStates(prev => ({ ...prev, news: false })), 2800),
       setTimeout(() => setLoadingStates(prev => ({ ...prev, movie: false })), 3200),
-      setTimeout(() => setLoadingStates(prev => ({ ...prev, stock: false })), 2600),      setTimeout(() => setLoadingStates(prev => ({ ...prev, crypto: false })), 2900),      setTimeout(() => setLoadingStates(prev => ({ ...prev, maps: false })), 2900),
+      setTimeout(() => setLoadingStates(prev => ({ ...prev, stock: false })), 2600),
+      setTimeout(() => setLoadingStates(prev => ({ ...prev, crypto: false })), 2900),
+      setTimeout(() => setLoadingStates(prev => ({ ...prev, maps: false })), 2700),
       setTimeout(() => setLoadingStates(prev => ({ ...prev, chatbot: false })), 3100),
+      setTimeout(() => setLoadingStates(prev => ({ ...prev, drawing: false })), 2950),
     ];
 
     return () => {
@@ -68,11 +87,12 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
   return (
     <>
       <div 
-        className="mt-8 shadow-4xl border border-black-600 rounded-lg w-[1200px] max-w-5xl min-h-[750px] overflow-hidden" 
+        className="mt-8 shadow-4xl border border-black-600 rounded-lg w-[1200px] max-w-5xl overflow-hidden" 
         style={{ 
           backgroundColor: isDarkMode ? 'var(--cmd-background)' : 'var(--cmd-background-l)', 
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-          transition: 'background-color 0.3s ease'
+          transition: 'background-color 0.3s ease',
+          maxHeight: '85vh'
         }}
       >
         <div 
@@ -127,7 +147,7 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
           CMD
         </p>
       </div>
-      <div className="p-8 break-words"> 
+      <div className="p-8 break-words overflow-y-auto scrollbar-hide" style={{ maxHeight: 'calc(85vh - 50px)' }}> 
         <p style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-3xl font-bold mb-6 ml-10">
           ~$ ls -la
         </p>
@@ -147,7 +167,11 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
                 >
                   <User size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /About
                 </p>
-                <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg flex items-center gap-2">
+                <p 
+                  style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} 
+                  className="text-lg flex items-center gap-2 cursor-pointer hover:opacity-80"
+                  onClick={() => setShowContactModal(true)}
+                >
                   <Mail size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Contact
                 </p>
               </div>
@@ -176,27 +200,15 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
             </p>
             <div className="ml-6 space-y-2">
               <div className="flex gap-4">
-                <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
-                  <PawPrint size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /PawSense
+                <p 
+                  onClick={() => setShowProjectsShowcase(true)}
+                  style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} 
+                  className="text-lg w-64 flex-shrink-0 flex items-center gap-2 cursor-pointer hover:opacity-80"
+                >
+                  <FolderOpen size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /View All Projects
                 </p>
                 <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
-                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-01-15 projects/pawsense →</span> <a href="https://github.com/Dubuu03/PawSense" style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}} className="hover:underline">https://github.com/Dubuu03/PawSense</a>
-                </p>
-              </div>
-              <div className="flex gap-4">
-                <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
-                  <Building2 size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /CSU_Forum
-                </p>
-                <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
-                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-01-15 projects/forum →</span> <a href="https://github.com/Dubuu03/CSU_Forum" style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}} className="hover:underline">https://github.com/Dubuu03/CSU_Forum</a>
-                </p>
-              </div>
-              <div className="flex gap-4">
-                <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
-                  <DollarSign size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /utangPH
-                </p>
-                <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
-                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-01-15 projects/utangph →</span> <a href="https://github.com/Dubuu03/utangph" style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}} className="hover:underline">https://github.com/Dubuu03/utangph</a>
+                  <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ drwxr-xr-x 3 carlvictoria admin 2025-01-15 projects/</span> <span style={{color: isDarkMode ? 'rgba(34, 197, 94, 0.8)' : 'rgba(22, 163, 74, 0.8)', fontSize: '0.6rem'}}>[CLICK TO OPEN]</span>
                 </p>
               </div>
             </div>
@@ -249,18 +261,6 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
                 </p>
               </div>
               <div className="flex gap-4">
-                <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
-                  <Film size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Movie Info
-                </p>
-                <p style={{fontFamily: 'var(--font-terminal)', fontSize: '0.65rem'}}>
-                  {loadingStates.movie ? (
-                    <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading Movie API{loadingDots}]</span>
-                  ) : (
-                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-11-20 features/movies → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>TMDB API</span></>
-                  )}
-                </p>
-              </div>
-              <div className="flex gap-4">
                 <p 
                   style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} 
                   className="text-lg w-64 flex-shrink-0 flex items-center gap-2 cursor-pointer hover:opacity-80"
@@ -276,7 +276,7 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
                   )}
                 </p>
               </div>
-              <div className="flex gap-4">
+              <div className="flex gap-4 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => setShowMapsModal(true)}>
                 <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
                   <Map size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Maps
                 </p>
@@ -284,11 +284,11 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
                   {loadingStates.maps ? (
                     <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading Maps API{loadingDots}]</span>
                   ) : (
-                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-11-10 features/maps → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Mapbox API</span></>
+                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-11-10 features/maps → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Leaflet + OSM</span></>
                   )}
                 </p>
               </div>
-              <div className="flex gap-4">
+              <div className="flex gap-4 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => setShowChatbotModal(true)}>
                 <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
                   <MessageCircle size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Chatbot
                 </p>
@@ -296,7 +296,7 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
                   {loadingStates.chatbot ? (
                     <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>[Downloading AI Model{loadingDots}]</span>
                   ) : (
-                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-11-05 features/chatbot → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>OpenAI API</span></>
+                    <><span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-11-05 features/chatbot → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Rule-based AI</span></>
                   )}
                 </p>
               </div>
@@ -321,7 +321,7 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
                   <span style={{color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', transition: 'color 0.3s ease'}}>~$ lrwxr-xr-x 1 carlvictoria admin 2025-12-05 playground/typing → API:</span> <span style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', transition: 'color 0.3s ease'}}>Random Word API</span>
                 </p>
               </div>
-              <div className="flex gap-4">
+              <div className="flex gap-4 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => setShowDrawingModal(true)}>
                 <p style={{color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'var(--font-terminal)', transition: 'color 0.3s ease'}} className="text-lg w-64 flex-shrink-0 flex items-center gap-2">
                   <Pencil size={16} color={isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'} /> /Drawing App
                 </p>
@@ -380,6 +380,104 @@ export default function ContentBox({ onThemeChange, onClose, onMusicStateChange 
           isDarkMode={isDarkMode} 
           onClose={() => setShowNewsModal(false)}
           minimizedIndex={(showAboutModal ? 1 : 0) + (showTypingTest ? 1 : 0) + (showMusicPlayer ? 1 : 0) + (showCrypto ? 1 : 0) + (showWeatherModal ? 1 : 0)}
+        />
+      )}
+      
+      {showMapsModal && (
+        <MapsModal 
+          isDarkMode={isDarkMode} 
+          onClose={() => setShowMapsModal(false)}
+          minimizedIndex={(showAboutModal ? 1 : 0) + (showTypingTest ? 1 : 0) + (showMusicPlayer ? 1 : 0) + (showCrypto ? 1 : 0) + (showWeatherModal ? 1 : 0) + (showNewsModal ? 1 : 0)}
+        />
+      )}
+      
+      {showChatbotModal && (
+        <ChatbotModal 
+          isDarkMode={isDarkMode} 
+          onClose={() => setShowChatbotModal(false)}
+          minimizedIndex={(showAboutModal ? 1 : 0) + (showTypingTest ? 1 : 0) + (showMusicPlayer ? 1 : 0) + (showCrypto ? 1 : 0) + (showWeatherModal ? 1 : 0) + (showNewsModal ? 1 : 0) + (showMapsModal ? 1 : 0)}
+        />
+      )}
+      
+      {showDrawingModal && (
+        <DrawingModal 
+          isDarkMode={isDarkMode} 
+          onClose={() => setShowDrawingModal(false)}
+          minimizedIndex={(showAboutModal ? 1 : 0) + (showTypingTest ? 1 : 0) + (showMusicPlayer ? 1 : 0) + (showCrypto ? 1 : 0) + (showWeatherModal ? 1 : 0) + (showNewsModal ? 1 : 0) + (showMapsModal ? 1 : 0) + (showChatbotModal ? 1 : 0)}
+        />
+      )}
+      
+      {/* Project Content Boxes */}
+      {showMapsProject && (
+        <ProjectContentBox
+          isDarkMode={isDarkMode}
+          title="Maps Explorer"
+          description="Interactive location search & mapping application"
+          icon={Map}
+          technologies={['Leaflet.js', 'OpenStreetMap', 'Nominatim API', 'Geolocation API']}
+          features={[
+            { label: 'Location Search', description: 'Search for any location worldwide with autocomplete suggestions' },
+            { label: 'Multiple Map Styles', description: 'Switch between Standard, Satellite, and Terrain views' },
+            { label: 'Geolocation', description: 'Get your current location with one click' },
+            { label: 'Interactive Controls', description: 'Zoom, pan, and explore with intuitive map controls' }
+          ]}
+          accentColor={{ dark: 'rgba(34, 197, 94, 1)', light: 'rgba(22, 163, 74, 1)' }}
+          onLaunch={() => { setShowMapsProject(false); setShowMapsModal(true); }}
+          onClose={() => setShowMapsProject(false)}
+        />
+      )}
+      
+      {showChatbotProject && (
+        <ProjectContentBox
+          isDarkMode={isDarkMode}
+          title="AI Chatbot"
+          description="Portfolio AI assistant with natural conversation"
+          icon={MessageCircle}
+          technologies={['Rule-based AI', 'Pattern Matching', 'React Hooks', 'TypeScript']}
+          features={[
+            { label: 'Natural Conversation', description: 'Chat naturally about Carl\'s skills, projects, and experience' },
+            { label: 'Portfolio Knowledge', description: 'Knows all about the portfolio features and how to use them' },
+            { label: 'Quick Actions', description: 'One-click shortcuts for common questions' },
+            { label: 'Real-time Responses', description: 'Instant, context-aware answers to your queries' }
+          ]}
+          accentColor={{ dark: 'rgba(139, 92, 246, 1)', light: 'rgba(124, 58, 237, 1)' }}
+          onLaunch={() => { setShowChatbotProject(false); setShowChatbotModal(true); }}
+          onClose={() => setShowChatbotProject(false)}
+        />
+      )}
+      
+      {showDrawingProject && (
+        <ProjectContentBox
+          isDarkMode={isDarkMode}
+          title="Drawing Canvas"
+          description="Creative canvas with community gallery"
+          icon={Pencil}
+          technologies={['HTML5 Canvas', 'Touch Support', 'MongoDB', 'REST API']}
+          features={[
+            { label: 'Creative Tools', description: 'Multiple brush sizes, colors, and an eraser tool' },
+            { label: 'Save to Gallery', description: 'Save your artwork with your name to the community gallery' },
+            { label: 'Community Gallery', description: 'View all submissions from other visitors' },
+            { label: 'Download', description: 'Download your artwork as a PNG image' }
+          ]}
+          accentColor={{ dark: 'rgba(236, 72, 153, 1)', light: 'rgba(219, 39, 119, 1)' }}
+          onLaunch={() => { setShowDrawingProject(false); setShowDrawingModal(true); }}
+          onClose={() => setShowDrawingProject(false)}
+        />
+      )}
+      
+      {showProjectsShowcase && (
+        <ProjectsShowcaseModal
+          isDarkMode={isDarkMode}
+          onClose={() => setShowProjectsShowcase(false)}
+          minimizedIndex={(showAboutModal ? 1 : 0) + (showTypingTest ? 1 : 0) + (showMusicPlayer ? 1 : 0) + (showCrypto ? 1 : 0) + (showWeatherModal ? 1 : 0) + (showNewsModal ? 1 : 0) + (showMapsModal ? 1 : 0) + (showChatbotModal ? 1 : 0) + (showDrawingModal ? 1 : 0)}
+        />
+      )}
+      
+      {showContactModal && (
+        <ContactModal
+          isDarkMode={isDarkMode}
+          onClose={() => setShowContactModal(false)}
+          minimizedIndex={(showAboutModal ? 1 : 0) + (showTypingTest ? 1 : 0) + (showMusicPlayer ? 1 : 0) + (showCrypto ? 1 : 0) + (showWeatherModal ? 1 : 0) + (showNewsModal ? 1 : 0) + (showMapsModal ? 1 : 0) + (showChatbotModal ? 1 : 0) + (showDrawingModal ? 1 : 0) + (showProjectsShowcase ? 1 : 0)}
         />
       )}
     </>

@@ -6,8 +6,9 @@ export interface IContact extends Document {
   email: string;
   subject: string;
   message: string;
+  type: 'general' | 'commission' | 'collaboration' | 'job';
+  status: 'unread' | 'read' | 'replied';
   createdAt: Date;
-  read: boolean;
 }
 
 // MongoDB Schema
@@ -35,16 +36,26 @@ const ContactSchema: Schema = new Schema({
     type: String,
     required: [true, 'Message is required'],
     trim: true,
-    maxlength: [1000, 'Message cannot exceed 1000 characters']
+    maxlength: [5000, 'Message cannot exceed 5000 characters']
+  },
+  type: {
+    type: String,
+    enum: ['general', 'commission', 'collaboration', 'job'],
+    default: 'general'
+  },
+  status: {
+    type: String,
+    enum: ['unread', 'read', 'replied'],
+    default: 'unread'
   },
   createdAt: {
     type: Date,
     default: Date.now
-  },
-  read: {
-    type: Boolean,
-    default: false
   }
 });
+
+// Index for better query performance
+ContactSchema.index({ createdAt: -1 });
+ContactSchema.index({ status: 1 });
 
 export default mongoose.models.Contact || mongoose.model<IContact>('Contact', ContactSchema);

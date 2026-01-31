@@ -112,6 +112,12 @@ export async function POST(request: NextRequest) {
       }, { status: 201 });
     } else {
       // Score didn't make it to top 5
+      // Still fetch current top 5 to return
+      const currentTopScores = await TypingScore.find()
+        .sort({ score: -1 })
+        .limit(5)
+        .select('name wpm accuracy score timestamp');
+
       return NextResponse.json({
         success: true,
         message: 'Score submitted, but did not make the top 5.',
@@ -121,6 +127,7 @@ export async function POST(request: NextRequest) {
           accuracy,
           score
         },
+        topScores: currentTopScores,
         madeLeaderboard: false,
         minimumScoreNeeded: lowestTopScore ? lowestTopScore.score + 1 : score
       }, { status: 200 });

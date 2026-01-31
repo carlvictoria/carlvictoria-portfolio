@@ -217,11 +217,39 @@ export default function WeatherModal({ onClose, isDarkMode, showTypingAnimation 
     }
   };
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
+    setShowSuggestions(false); // Always close suggestions on Enter
+    
     if (suggestions.length > 0) {
       const location = suggestions[0];
       selectLocation(location);
+    } else if (searchQuery.trim().length > 0) {
+      // If no suggestions but there's a query, fetch suggestions first then select
+      try {
+        const response = await fetch(
+          `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(searchQuery.trim())}&limit=1&appid=${API_KEY}`
+        );
+        
+        if (response.ok) {
+          const locations = await response.json();
+          if (locations.length > 0) {
+            const location = locations[0];
+            const displayName = location.state 
+              ? `${location.name}, ${location.state}, ${location.country}`
+              : `${location.name}, ${location.country}`;
+            fetchWeatherData(location.lat, location.lon, location.name);
+          }
+        }
+      } catch (err) {
+        console.error('Error searching location:', err);
+      }
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      setShowSuggestions(false);
     }
   };
 
@@ -314,8 +342,20 @@ export default function WeatherModal({ onClose, isDarkMode, showTypingAnimation 
   };
 
   return (
-    <Modal onClose={onClose} isDarkMode={isDarkMode} showTypingAnimation={showTypingAnimation} width="1100px" minWidth="900px" minHeight="600px">
+    <Modal onClose={onClose} isDarkMode={isDarkMode} showTypingAnimation={showTypingAnimation} title="Weather App" typingText="weather" width="1100px" minWidth="900px" minHeight="600px">
       <div className="p-6 h-full flex flex-col">
+        {/* Command Header */}
+        <p 
+          style={{ 
+            color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', 
+            fontSize: '0.75rem', 
+            fontFamily: 'monospace',
+            marginBottom: '16px'
+          }}
+        >
+          ~$ ./weather-app --mode=interactive
+        </p>
+        
         {/* Header */}
         <div className="mb-6">
           <h1 style={{ color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'monospace', fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '8px' }}>
@@ -346,6 +386,7 @@ export default function WeatherModal({ onClose, isDarkMode, showTypingAnimation 
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleKeyDown}
                   placeholder="Search location (e.g., New York, London, Tokyo...)"
                   className="w-full pl-12 pr-4 py-3 rounded-lg transition-all"
                   style={{
@@ -430,7 +471,7 @@ export default function WeatherModal({ onClose, isDarkMode, showTypingAnimation 
             }}
           >
             {!hasSearched ? (
-              <div className="flex flex-col items-center justify-center h-full">
+              <div className="flex flex-col items-center justify-center h-full text-center px-4">
                 <MapPin size={48} style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', opacity: 0.5, marginBottom: '16px' }} />
                 <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '1.1rem', opacity: 0.7 }}>
                   Search for a location to view weather dashboard
@@ -546,8 +587,8 @@ export default function WeatherModal({ onClose, isDarkMode, showTypingAnimation 
               {forecastList.length > 0 ? (
                 <Line data={chartData} options={chartOptions as any} />
               ) : (
-                <div className="flex items-center justify-center h-full">
-                  <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace' }}>No hourly data available</p>
+                <div className="flex items-center justify-center h-full text-center">
+                  <p style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', opacity: 0.6 }}>No hourly data available</p>
                 </div>
               )}
             </div>
@@ -562,7 +603,7 @@ export default function WeatherModal({ onClose, isDarkMode, showTypingAnimation 
                   <div style={{ fontSize: '0.75rem', color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', marginTop: 6 }}>{d.description}</div>
                 </div>
               )) : (
-                <div style={{ gridColumn: '1 / -1', textAlign: 'center', fontFamily: 'monospace', color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)' }}>No forecast data</div>
+                <div className="flex items-center justify-center text-center" style={{ gridColumn: '1 / -1', minHeight: '100px', fontFamily: 'monospace', color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', opacity: 0.6 }}>No forecast data</div>
               )}
             </div>
           </div>

@@ -236,7 +236,14 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    setShowSuggestions(false); // Close dropdown on Enter
     searchCrypto();
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      setShowSuggestions(false);
+    }
   };
 
   const formatNumber = (num: number, isPrice: boolean = false) => {
@@ -402,6 +409,7 @@ export default function CryptoModal({ isDarkMode, onClose, minimizedIndex = 0 }:
                 type="text"
                 value={searchQuery}
                 onChange={(e) => handleInputChange(e.target.value)}
+                onKeyDown={handleKeyDown}
                 onFocus={() => searchQuery.length >= 3 && setShowSuggestions(true)}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 className="w-full p-3 rounded-lg outline-none"
