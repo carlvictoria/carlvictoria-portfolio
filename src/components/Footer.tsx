@@ -14,16 +14,12 @@ export default function Footer({ isDarkMode, visible }: FooterProps) {
 
   return (
     <footer 
-      className="w-full py-4 px-6 transition-all duration-500 animate-fade-in"
+      className="fixed bottom-0 left-0 w-full py-4 px-6 transition-all duration-500 animate-fade-in"
       style={{
         background: isDarkMode 
-          ? 'linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%)'
-          : 'linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.08) 100%)',
-        marginTop: 'auto',
-        width: '100vw',
-        marginLeft: 'calc(-50vw + 50%)',
-        paddingLeft: 'calc(50vw - 50% + 1.5rem)',
-        paddingRight: 'calc(50vw - 50% + 1.5rem)'
+          ? 'linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.5) 100%)'
+          : 'linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.1) 100%)',
+        zIndex: 0
       }}
     >
       <div className="max-w-7xl mx-auto">
@@ -72,7 +68,7 @@ export default function Footer({ isDarkMode, visible }: FooterProps) {
           {/* Center: Social Links */}
           <div className="flex items-center gap-4">
             <a
-              href="https://github.com/carlvictoria"
+              href="https://github.com/Dubuu03"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-lg transition-all hover:opacity-80 hover:scale-110"
@@ -96,7 +92,7 @@ export default function Footer({ isDarkMode, visible }: FooterProps) {
               <Linkedin size={18} />
             </a>
             <a
-              href="mailto:contact@carlvictoria.dev"
+              href="mailto:victoriacarlangelo@gmail.com"
               className="p-2 rounded-lg transition-all hover:opacity-80 hover:scale-110"
               style={{
                 color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)'

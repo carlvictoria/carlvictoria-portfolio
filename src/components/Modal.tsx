@@ -168,14 +168,15 @@ export default function Modal({
 
   return (
     <div 
-      className="fixed z-50" 
+      className="fixed" 
       style={{ 
         backgroundColor: 'transparent',
         inset: 0,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        zIndex: 50
       }}
     >
       <div 

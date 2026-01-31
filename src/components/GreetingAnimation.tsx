@@ -71,15 +71,16 @@ export default function GreetingAnimation({ isDarkMode }: { isDarkMode: boolean 
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen">
       <FloatingStars isDarkMode={currentTheme} />
       <SoundWave isDarkMode={currentTheme} isPlaying={isMusicPlaying} />
       <div 
-        className="transition-all duration-[1000ms] ease-in-out flex flex-col items-center flex-1"
+        className="transition-all duration-[1000ms] ease-in-out flex flex-col items-center"
         style={{
           transform: moveToTop ? 'translateY(4rem)' : 'translateY(50vh)',
           position: 'relative',
           zIndex: 1,
+          paddingBottom: '100px' // Space for fixed footer
         }}
       >
       <h1 

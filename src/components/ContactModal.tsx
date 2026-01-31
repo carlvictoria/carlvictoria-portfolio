@@ -114,28 +114,28 @@ export default function ContactModal({ isDarkMode, onClose, minimizedIndex = 0 }
       isDarkMode={isDarkMode}
       onClose={onClose}
       title="Contact"
-      width="700px"
-      minWidth="600px"
-      minHeight="650px"
+      width="800px"
+      minWidth="700px"
+      minHeight="720px"
       showTypingAnimation={true}
       typingText="contact.exe"
       minimizedIndex={minimizedIndex}
     >
-      <div className="flex flex-col h-full p-6" style={{ maxHeight: '75vh' }}>
+      <div className="flex flex-col h-full p-4" style={{ overflow: 'visible' }}>
         {/* Command Header */}
         <p 
           style={{ 
             color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', 
             fontSize: '0.75rem', 
             fontFamily: 'monospace',
-            marginBottom: '16px'
+            marginBottom: '12px'
           }}
         >
           ~$ ./contact --send-message
         </p>
 
         {/* Header */}
-        <div className="mb-6">
+        <div className="mb-4">
           <div className="flex items-center gap-3 mb-2">
             <div 
               className="p-2 rounded-lg"
@@ -196,10 +196,10 @@ export default function ContactModal({ isDarkMode, onClose, minimizedIndex = 0 }
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto pr-2 space-y-4">
+        <form onSubmit={handleSubmit} className="flex-1 space-y-3 px-1" style={{ overflow: 'visible' }}>
           {/* Contact Type Selection */}
           <div>
-            <label style={labelStyle} className="block mb-2">
+            <label style={labelStyle} className="block mb-1">
               <FileText size={14} className="inline mr-2" />
               Message Type
             </label>
@@ -258,9 +258,9 @@ export default function ContactModal({ isDarkMode, onClose, minimizedIndex = 0 }
           </div>
 
           {/* Name & Email Row */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label style={labelStyle} className="block mb-2">
+              <label style={labelStyle} className="block mb-1">
                 <User size={14} className="inline mr-2" />
                 Your Name
               </label>
@@ -270,7 +270,7 @@ export default function ContactModal({ isDarkMode, onClose, minimizedIndex = 0 }
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="John Doe"
-                className="w-full p-3 rounded-lg outline-none transition-all focus:ring-2"
+                className="w-full p-2.5 rounded-lg outline-none transition-all focus:ring-2"
                 style={{
                   ...inputStyle,
                   '--tw-ring-color': isDarkMode ? 'rgba(59, 130, 246, 0.5)' : 'rgba(37, 99, 235, 0.5)'
@@ -280,7 +280,7 @@ export default function ContactModal({ isDarkMode, onClose, minimizedIndex = 0 }
               />
             </div>
             <div>
-              <label style={labelStyle} className="block mb-2">
+              <label style={labelStyle} className="block mb-1">
                 <Mail size={14} className="inline mr-2" />
                 Email Address
               </label>
@@ -289,7 +289,7 @@ export default function ContactModal({ isDarkMode, onClose, minimizedIndex = 0 }
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="john@example.com"
-                className="w-full p-3 rounded-lg outline-none transition-all focus:ring-2"
+                className="w-full p-2.5 rounded-lg outline-none transition-all focus:ring-2"
                 style={inputStyle}
                 maxLength={100}
                 disabled={isSubmitting}
@@ -299,7 +299,7 @@ export default function ContactModal({ isDarkMode, onClose, minimizedIndex = 0 }
 
           {/* Subject */}
           <div>
-            <label style={labelStyle} className="block mb-2">
+            <label style={labelStyle} className="block mb-1">
               <FileText size={14} className="inline mr-2" />
               Subject
             </label>
@@ -308,7 +308,7 @@ export default function ContactModal({ isDarkMode, onClose, minimizedIndex = 0 }
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="What's this about?"
-              className="w-full p-3 rounded-lg outline-none transition-all focus:ring-2"
+              className="w-full p-2.5 rounded-lg outline-none transition-all focus:ring-2"
               style={inputStyle}
               maxLength={200}
               disabled={isSubmitting}
@@ -317,7 +317,7 @@ export default function ContactModal({ isDarkMode, onClose, minimizedIndex = 0 }
 
           {/* Message */}
           <div>
-            <label style={labelStyle} className="flex justify-between mb-2">
+            <label style={labelStyle} className="flex justify-between mb-1">
               <span>
                 <MessageSquare size={14} className="inline mr-2" />
                 Message
@@ -330,10 +330,10 @@ export default function ContactModal({ isDarkMode, onClose, minimizedIndex = 0 }
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Tell me about your project, idea, or just say hello..."
-              className="w-full p-3 rounded-lg outline-none transition-all focus:ring-2 resize-none"
+              className="w-full p-2.5 rounded-lg outline-none transition-all focus:ring-2 resize-none"
               style={{
                 ...inputStyle,
-                minHeight: '140px'
+                minHeight: '100px'
               }}
               maxLength={MAX_MESSAGE_LENGTH}
               disabled={isSubmitting}
@@ -344,7 +344,7 @@ export default function ContactModal({ isDarkMode, onClose, minimizedIndex = 0 }
           <button
             type="submit"
             disabled={isSubmitting || !name.trim() || !email.trim() || !subject.trim() || !message.trim()}
-            className="w-full p-4 rounded-lg flex items-center justify-center gap-3 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="w-full p-3 rounded-lg flex items-center justify-center gap-3 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             style={{
               background: isDarkMode 
                 ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%)'
@@ -374,7 +374,7 @@ export default function ContactModal({ isDarkMode, onClose, minimizedIndex = 0 }
         </form>
 
         {/* Footer */}
-        <div className="mt-4 pt-3" style={{ borderTop: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}` }}>
+        <div className="mt-3 pt-2" style={{ borderTop: `1px solid ${isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}` }}>
           <p style={{ 
             color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', 
             fontFamily: 'var(--font-terminal)', 
