@@ -241,12 +241,12 @@ export default function DrawingModal({ isDarkMode, onClose, minimizedIndex = 0 }
       title="Drawing App"
       width="1000px"
       minWidth="800px"
-      minHeight="800px"
+      minHeight="900px"
       showTypingAnimation={true}
       typingText="drawing-canvas.exe"
       minimizedIndex={minimizedIndex}
     >
-      <div className="flex flex-col h-full" style={{ maxHeight: '750px' }}>
+      <div className="flex flex-col h-full" style={{ maxHeight: '850px' }}>
         {/* Header */}
         <div className="mb-3">
           <p 
