@@ -521,13 +521,13 @@ export default function WeatherModal({ onClose, isDarkMode, showTypingAnimation 
                       </span>
                     </div>
                     <div style={{ color: '#ffffff', fontFamily: 'monospace', fontSize: '1.25rem', fontWeight: '700' }}>
-                      {formatTemp(weatherData.current.temp)}
+                      {weatherData ? formatTemp(weatherData.current.temp) : '--'}
                     </div>
                     <div style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.75rem', opacity: 0.7 }}>
-                      Feels like {formatTemp(weatherData.current.feels_like)}
+                      Feels like {weatherData ? formatTemp(weatherData.current.feels_like) : '--'}
                     </div>
                     <div style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.75rem', opacity: 0.7, marginTop: '8px' }}>
-                      {weatherData.current.weather[0].description}
+                      {weatherData?.current.weather[0].description ?? ''}
                     </div>
                   </div>
 
@@ -539,10 +539,10 @@ export default function WeatherModal({ onClose, isDarkMode, showTypingAnimation 
                       </span>
                     </div>
                     <div style={{ color: isDarkMode ? 'var(--title-color)' : 'var(--title-color-l)', fontFamily: 'monospace', fontSize: '1rem', fontWeight: '700' }}>
-                      {Math.round(weatherData.current.wind_speed)} m/s
+                      {weatherData ? `${Math.round(weatherData.current.wind_speed)} m/s` : '--'}
                     </div>
                     <div style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.75rem', opacity: 0.7 }}>
-                      {formatWindDirection(weatherData.current.wind_deg)}
+                      {weatherData ? formatWindDirection(weatherData.current.wind_deg) : '--'}
                     </div>
                   </div>
 
@@ -551,17 +551,17 @@ export default function WeatherModal({ onClose, isDarkMode, showTypingAnimation 
                       <div className="flex items-center gap-2">
                         <Droplets size={14} style={{ color: isDarkMode ? 'rgba(168, 85, 247, 1)' : 'rgba(147, 51, 234, 1)' }} />
                         <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.75rem' }}>
-                          Humidity: {weatherData.current.humidity}%
+                          Humidity: {weatherData?.current.humidity ?? '--'}%
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Eye size={14} style={{ color: isDarkMode ? 'rgba(251, 191, 36, 1)' : 'rgba(245, 158, 11, 1)' }} />
                         <span style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.75rem' }}>
-                          Visibility: {weatherData.current.visibility}km
+                          Visibility: {weatherData?.current.visibility ?? '--'}km
                         </span>
                       </div>
                       <div style={{ color: isDarkMode ? 'var(--cmd-title)' : 'var(--cmd-title-l)', fontFamily: 'monospace', fontSize: '0.75rem' }}>
-                        Pressure: {weatherData.current.pressure} hPa
+                        Pressure: {weatherData?.current.pressure ?? '--'} hPa
                       </div>
                     </div>
                   </div>
