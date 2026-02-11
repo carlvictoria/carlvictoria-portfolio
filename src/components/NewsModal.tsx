@@ -39,15 +39,8 @@ const NewsModal: React.FC<NewsModalProps> = ({ isDarkMode, onClose, minimizedInd
       setLoading(true);
       setError(null);
 
-      const apiKey = process.env.NEXT_PUBLIC_GNEWS_API_KEY;
-      
-      if (!apiKey) {
-        throw new Error("API key not configured");
-      }
-
-      const response = await fetch(
-        `https://gnews.io/api/v4/top-headlines?lang=en&max=8&token=${apiKey}`
-      );
+      // Use our API route to avoid CORS issues
+      const response = await fetch('/api/news');
 
       if (!response.ok) {
         throw new Error(`Failed to fetch news: ${response.status}`);
