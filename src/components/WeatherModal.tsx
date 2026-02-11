@@ -342,7 +342,7 @@ export default function WeatherModal({ onClose, isDarkMode, showTypingAnimation 
   };
 
   return (
-    <Modal onClose={onClose} isDarkMode={isDarkMode} showTypingAnimation={showTypingAnimation} title="Weather App" typingText="weather" width="1100px" minWidth="900px" minHeight="600px">
+    <Modal onClose={onClose} isDarkMode={isDarkMode} showTypingAnimation={showTypingAnimation} title="Weather App" typingText="weather-checker.exe" width="1100px" minWidth="900px" minHeight="600px">
       <div className="p-6 h-full flex flex-col">
         {/* Command Header */}
         <p 
